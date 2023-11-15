@@ -582,5 +582,18 @@
   "axelorMobileGroupStatus": "Статус группы",
   "axelorMobileGroupNumber": "Номер группы",
   "axelorMobileGroupChiefInspector": "Старший инспектор",
-  "axelorMobileGroupPhoneNumber": "Номер телефона"
+  "axelorMobileGroupPhoneNumber": "Номер телефона",
+  "axelorTransportationNumber": "Номер поездки",
+  "axelorTransportationStatus": "Статус поездки",
+  "axelorNumberEns": "Номер ЭНП",
+  "axelorStatusEns": "Статус ЭНП",
+  "axelorTypeOfAlarm": "Вид тревоги",
+  "axelorBatteryLevel": "Состояние заряда батареи",
+  "axelorTraccarIdEns": "Id ЭНП в траккаре",
+  "axelorDateTimeActivation": "Дата и время активации",
+  "axelorDateTimeDeactivation": "Дата и время деактивации",
+  "axelorCustomsDeparture": "Таможенный орган отправления",
+  "axelorCustomsDestination": "Таможенный орган назначения",
+  "axelorPhoneNumberDriver": "Номер телефон водителя",
+  "axelorDeclarationTransportationVehiclePlateNo": "Гос. номер АТС"
 }
