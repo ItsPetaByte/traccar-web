@@ -71,6 +71,12 @@ const MainMap = ({
           longitude={selectedPosition.longitude}
         />
       )}
+      {selectedMobileGroupPosition && (
+        <MapCamera
+          latitude={selectedMobileGroupPosition.latitude}
+          longitude={selectedMobileGroupPosition.longitude}
+        />
+      )}
     </>
   );
 };
