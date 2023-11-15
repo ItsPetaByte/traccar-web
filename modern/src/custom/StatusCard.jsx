@@ -13,7 +13,6 @@ import {
   TableCell,
   CardMedia,
   CardActions,
-  Divider,
 } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import CloseIcon from '@mui/icons-material/Close';
@@ -198,8 +197,6 @@ const StatusCard = ({ deviceId, position, onClose }) => {
                           content={getDeviceValue(device, key)}
                         />
                       ))}
-
-                  <Divider sx={{ width: '100%', my: '10px' }} />
                 </TableBody>
               </Table>
             </CardContent>
