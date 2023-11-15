@@ -89,19 +89,19 @@ const MainPage = () => {
         mobileGroupsPositions={mobileGroupsPositions}
       />
       <Paper square elevation={3} className={classes.header}>
-        {/* <MainToolbar */}
-        {/*   filteredDevices={filteredDevices} */}
-        {/*   devicesOpen={devicesOpen} */}
-        {/*   setDevicesOpen={setDevicesOpen} */}
-        {/*   keyword={keyword} */}
-        {/*   setKeyword={setKeyword} */}
-        {/*   filter={filter} */}
-        {/*   setFilter={setFilter} */}
-        {/*   filterSort={filterSort} */}
-        {/*   setFilterSort={setFilterSort} */}
-        {/*   filterMap={filterMap} */}
-        {/*   setFilterMap={setFilterMap} */}
-        {/* /> */}
+        <MainToolbar
+          filteredDevices={filteredDevices}
+          devicesOpen={devicesOpen}
+          setDevicesOpen={setDevicesOpen}
+          keyword={keyword}
+          setKeyword={setKeyword}
+          filter={filter}
+          setFilter={setFilter}
+          filterSort={filterSort}
+          setFilterSort={setFilterSort}
+          filterMap={filterMap}
+          setFilterMap={setFilterMap}
+        />
       </Paper>
       {selectedDeviceId && (
         <StatusCard
