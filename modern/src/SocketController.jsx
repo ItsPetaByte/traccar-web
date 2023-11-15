@@ -49,6 +49,18 @@ const SocketController = () => {
     if (positionsResponse.ok) {
       dispatch(sessionActions.updatePositions(await positionsResponse.json()));
     }
+
+    return positionsResponse.status;
+  };
+
+  const fetchDevices = async () => {
+    const devicesResponse = await fetch('/api/devices');
+    if (devicesResponse.ok) {
+      dispatch(devicesActions.update(await devicesResponse.json()));
+      await getTransportations();
+    }
+
+    return devicesResponse.status;
   };
 
   const connectSocket = () => {
@@ -66,16 +78,10 @@ const SocketController = () => {
       dispatch(sessionActions.updateSocket(false));
       if (event.code !== logoutCode) {
         try {
-          const devicesResponse = await fetch('/api/devices');
-          if (devicesResponse.ok) {
-            dispatch(devicesActions.update(await devicesResponse.json()));
-            await getTransportations();
-          }
-          await fetchPositions();
-          if (
-            devicesResponse.status === 401 ||
-            positionsResponse.status === 401
-          ) {
+          const devicesStatus = await fetchDevices();
+          const positionsStatus = await fetchPositions();
+
+          if (positionsStatus === 401 || devicesStatus === 401) {
             navigate('/login');
           }
         } catch (error) {
@@ -143,7 +149,12 @@ const SocketController = () => {
   }, [events, soundEvents, soundAlarms]);
 
   useEffectAsync(async () => {
-    await fetchPositions();
+    const positionsStatus = await fetchPositions();
+    const devicesStatus = await fetchDevices();
+
+    if (positionsStatus === 401 || devicesStatus === 401) {
+      navigate('/login');
+    }
   }, []);
 
   return (

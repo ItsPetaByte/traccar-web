@@ -13,7 +13,6 @@ import {
   TableCell,
   CardMedia,
   CardActions,
-  Divider,
 } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import CloseIcon from '@mui/icons-material/Close';
@@ -23,9 +22,6 @@ import {
   useLocalization,
   useTranslation,
 } from '../common/components/LocalizationProvider';
-import PositionValue from '../common/components/PositionValue';
-import usePositionAttributes from '../common/attributes/usePositionAttributes';
-import { useAttributePreference } from '../common/util/preferences';
 import useDeviceAttributes from '../common/attributes/useDeviceAttributes';
 
 const getStatus = (arr, value, locale) => {
@@ -127,12 +123,6 @@ const StatusCard = ({ deviceId, position, onClose }) => {
 
   const deviceImage = device?.attributes?.deviceImage;
 
-  const positionAttributes = usePositionAttributes(t);
-  const positionItems = useAttributePreference(
-    'positionItems',
-    'speed,address,totalDistance,course'
-  );
-
   const deviceAttributes = useDeviceAttributes(t);
   const deviceItems =
     'transportationNumber,transportationStatus,seals.numberEns,informationSeal.statusEns,informationSeal.alarm,seals.positionsId.batteryLevel,seals.idFromTraccar,informationSeal.dateTimeActivation,informationSeal.dateTimeDeactivation,declaration.customsDeparture.name,declaration.customsDestination.name,phoneNumberDriver,declaration.transportationVehicle.plateNo';
@@ -205,38 +195,6 @@ const StatusCard = ({ deviceId, position, onClose }) => {
                               : key
                           }
                           content={getDeviceValue(device, key)}
-                        />
-                      ))}
-
-                  <Divider sx={{ width: '100%', my: '10px' }} />
-
-                  {position &&
-                    positionItems
-                      .split(',')
-                      .filter(
-                        (key) =>
-                          position.hasOwnProperty(key) ||
-                          position.attributes.hasOwnProperty(key)
-                      )
-                      .map((key) => (
-                        <StatusRow
-                          key={key}
-                          name={
-                            positionAttributes.hasOwnProperty(key)
-                              ? positionAttributes[key].name
-                              : key
-                          }
-                          content={
-                            <PositionValue
-                              position={position}
-                              property={
-                                position.hasOwnProperty(key) ? key : null
-                              }
-                              attribute={
-                                position.hasOwnProperty(key) ? null : key
-                              }
-                            />
-                          }
                         />
                       ))}
                 </TableBody>
