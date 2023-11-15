@@ -25,6 +25,12 @@ import tramSvg from '../../resources/images/icon/tram.svg';
 import trolleybusSvg from '../../resources/images/icon/trolleybus.svg';
 import truckSvg from '../../resources/images/icon/truck.svg';
 import vanSvg from '../../resources/images/icon/van.svg';
+import truckDefaultSvg from '../../resources/images/icon/truck-default.svg';
+import mobileGroupSvg from '../../resources/images/icon/mobileGroup.svg';
+import truckBlueSvg from '../../resources/images/icon/truck-blue.svg';
+import truckGreenSvg from '../../resources/images/icon/truck-green.svg';
+import truckRedSvg from '../../resources/images/icon/truck-red.svg';
+import truckGreySvg from '../../resources/images/icon/truck-grey.svg';
 
 export const mapIcons = {
   animal: animalSvg,
@@ -48,6 +54,12 @@ export const mapIcons = {
   trolleybus: trolleybusSvg,
   truck: truckSvg,
   van: vanSvg,
+  mobileGroup: mobileGroupSvg,
+  truckDefault: truckDefaultSvg,
+  truckBlue: truckBlueSvg,
+  truckGreen: truckGreenSvg,
+  truckRed: truckRedSvg,
+  truckGrey: truckGreySvg,
 };
 
 export const mapIconKey = (category) => (mapIcons.hasOwnProperty(category) ? category : 'default');
@@ -56,6 +68,14 @@ export const mapImages = {};
 
 const mapPalette = createPalette({
   neutral: { main: grey[500] },
+  primary: { main: '#2196f3' },
+  secondary: { main: '#00f5bc' },
+  success: { main: '#45de4b' },
+  error: { main: '#f44336' },
+  warning: { main: '#ff9800' },
+  info: { main: '#2196f3' },
+  light: { main: '#f5f5f5' },
+  dark: { main: '#212121' },
 });
 
 export default async () => {
@@ -64,9 +84,13 @@ export default async () => {
   mapImages.direction = await prepareIcon(await loadImage(directionSvg));
   await Promise.all(Object.keys(mapIcons).map(async (category) => {
     const results = [];
-    ['info', 'success', 'error', 'neutral'].forEach((color) => {
+    ['primary', 'secondary', 'success', 'error', 'warning', 'info', 'light', 'dark', 'neutral'].forEach((color) => {
       results.push(loadImage(mapIcons[category]).then((icon) => {
-        mapImages[`${category}-${color}`] = prepareIcon(background, icon, mapPalette[color].main);
+        if (!category.includes('truck')) {
+          mapImages[`${category}-${color}`] = prepareIcon(background, icon, mapPalette[color].main);
+        } else {
+          mapImages[`${category}-${color}`] = icon;
+        }
       }));
     });
     await Promise.all(results);

@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/styles';
 import { map } from './MapView';
-import { formatTime, getStatusColor } from '../common/util/formatter';
+import {formatTime, getMobileGroupStatusColor, getStatusColor} from '../common/util/formatter';
 import { mapIconKey } from '../map/core/preloadImages';
 import { findFonts } from '../map/core/mapUtil';
 import { useAttributePreference, usePreference } from '../common/util/preferences';
@@ -21,31 +21,17 @@ const MapMobileGroupPositions = ({ positions, onClick, showStatus, selectedPosit
 
   const mapCluster = useAttributePreference('mapCluster', true);
   const hours12 = usePreference('twelveHourFormat');
-  const directionType = useAttributePreference('mapDirection', 'selected');
 
-  const createFeature = (devices, position, selectedPositionId) => {
-    const device = devices[position.deviceId];
-    let showDirection;
-    switch (directionType) {
-      case 'none':
-        showDirection = false;
-        break;
-      case 'all':
-        showDirection = true;
-        break;
-      default:
-        showDirection = selectedPositionId === position.id;
-        break;
-    }
+  const createFeature = (devices, position) => {
     return {
       id: position?.id,
       deviceId: position?.deviceId,
-      name: device?.name,
+      name: position['mobileGroup.groupNumber'] || 'Unknown Mobile Group',
       fixTime: formatTime(position.fixTime, 'seconds', hours12),
-      category: mapIconKey(device?.category),
-      color: showStatus ? position?.attributes?.color || getStatusColor(device?.status) : 'neutral',
+      category: mapIconKey('mobileGroup'),
+      color: showStatus ? getMobileGroupStatusColor(position['mobileGroup.groupStatus']) : 'neutral',
       rotation: position?.course,
-      direction: showDirection,
+      direction: false,
     };
   };
 
