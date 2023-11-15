@@ -8,9 +8,10 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  IconButton,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import makeStyles from "@mui/styles/makeStyles";
-
 import {
   useLocalization,
   useTranslation,
@@ -23,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
     width: theme.dimensions.popupMaxWidth,
   },
   media: {
-    height: theme.dimensions.popupImageHeight,
     display: "flex",
     justifyContent: "flex-end",
     alignItems: "flex-start",
@@ -115,7 +115,7 @@ const MobileGroupStatusCard = ({ position, onClose, desktopPadding = 0 }) => {
   const groupNumber = position?.["mobileGroup.groupNumber"];
   const groupRole =
     position?.["mobileGroup.groupInspector.jobTitleFunction.name"];
-  const groupPhoneNumber = position?.["mobileGroup.groupNumber"];
+  const groupPhoneNumber = position?.["mobileGroup.groupInspector.mobilePhone"];
 
   const rows = [
     {
@@ -140,6 +140,13 @@ const MobileGroupStatusCard = ({ position, onClose, desktopPadding = 0 }) => {
     <div className={classes.root}>
       <Draggable handle={`.${classes.media}, .${classes.header}`}>
         <Card elevation={3} className={classes.card}>
+          <div className={classes.header}>
+            <div>{groupNumber ?? ""}</div>
+            <IconButton size="small" onClick={onClose} onTouchStart={onClose}>
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </div>
+
           {position && (
             <CardContent className={classes.content}>
               <Table size="small" classes={{ root: classes.table }}>
