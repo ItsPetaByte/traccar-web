@@ -36,8 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MainToolbar = ({ filter, setFilter, setFilterMap }) => {
-  setFilterMap(true);
+const MainToolbar = ({ filter, setFilter, filterMap, setFilterMap }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -64,6 +63,13 @@ const MainToolbar = ({ filter, setFilter, setFilterMap }) => {
       { id: 'unknown', label: `${t('deviceStatusUnknown')} (${deviceStatusCount('unknown')})` },
     ]);
   }, [devices]);
+
+  const handleFilter = (field, value) => {
+    if (filterMap === false) {
+      setFilterMap(true);
+    }
+    setFilter({ ...filter, [field]: value });
+  };
 
   const handleLogout = async () => {
     const notificationToken = window.localStorage.getItem('notificationToken');
@@ -118,7 +124,7 @@ const MainToolbar = ({ filter, setFilter, setFilterMap }) => {
               value={deviceStatusOptions.filter((f) => filter.statuses.some((s) => s === f.id))}
               onChange={(event, value) => {
                 const ids = value.map((item) => item?.id || item);
-                setFilter({ ...filter, statuses: ids });
+                handleFilter('statuses', ids);
               }}
               // eslint-disable-next-line react/jsx-props-no-spreading
               renderInput={(params) => <TextField {...params} label={t('deviceStatus')} />}
@@ -129,7 +135,7 @@ const MainToolbar = ({ filter, setFilter, setFilterMap }) => {
               options={Object.values(groups)}
               value={filter.groups}
               onChange={(event, value) => {
-                setFilter({ ...filter, groups: value });
+                handleFilter('groups', value);
               }}
               // eslint-disable-next-line react/jsx-props-no-spreading
               renderInput={(params) => <TextField {...params} label={t('settingsGroups')} />}
