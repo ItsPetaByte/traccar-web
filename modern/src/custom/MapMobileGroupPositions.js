@@ -28,7 +28,7 @@ const MapMobileGroupPositions = ({ positions, onClick, showStatus, selectedPosit
       deviceId: position?.deviceId,
       name: position['mobileGroup.groupNumber'] || 'Unknown Mobile Group',
       fixTime: formatTime(position.fixTime, 'seconds', hours12),
-      category: mapIconKey('mobileGroup'),
+      category: mapIconKey('car'),
       color: showStatus ? getMobileGroupStatusColor(position['mobileGroup.groupStatus']) : 'neutral',
       rotation: position?.course,
       direction: false,
