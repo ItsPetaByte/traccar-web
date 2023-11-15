@@ -589,5 +589,18 @@
   "axelorMobileGroupStatus": "Group status",
   "axelorMobileGroupNumber": "Group number",
   "axelorMobileGroupChiefInspector": "Chief Inspector",
-  "axelorMobileGroupPhoneNumber": "Phone number"
+  "axelorMobileGroupPhoneNumber": "Phone number",
+  "axelorTransportationNumber": "Trip number",
+  "axelorTransportationStatus": "Trip status",
+  "axelorNumberEns": "Ens number",
+  "axelorStatusEns": "Ens status",
+  "axelorTypeOfAlarm": "Type of alarm",
+  "axelorBatteryLevel": "Battery charge level",
+  "axelorTraccarIdEns": "Ens id in traccar",
+  "axelorDateTimeActivation": "Activation date and time",
+  "axelorDateTimeDeactivation": "Deactivation date and time",
+  "axelorCustomsDeparture": "Customs authority of departure",
+  "axelorCustomsDestination": "Customs authority of destination",
+  "axelorPhoneNumberDriver": "Driver's phone number",
+  "axelorDeclarationTransportationVehiclePlateNo": "Declaration Vehicle license plate number"
 }

@@ -85,6 +85,7 @@ const MainPage = () => {
       <MainMap
         filteredPositions={filteredPositions}
         selectedPosition={selectedPosition}
+        selectedMobileGroupPosition={selectedMobileGroupPosition}
         mobileGroupsPositions={mobileGroupsPositions}
       />
       <Paper square elevation={3} className={classes.header}>

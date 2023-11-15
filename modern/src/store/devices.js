@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import transportationApi from '../services/transportation';
 
 const { reducer, actions } = createSlice({
   name: 'devices',
@@ -30,6 +31,18 @@ const { reducer, actions } = createSlice({
       delete state.items[action.payload];
     },
   },
+  extraReducers: (builder) => {
+    builder.addMatcher(transportationApi.endpoints.transportations.matchFulfilled, (state, action) => {
+      action.payload?.data.forEach((item) => {
+        const id = item?.['seals.idFromTraccar'];
+        const originItem = state.items[id];
+        const mergedItem = {...item, ...originItem};
+        if(id && state.items.hasOwnProperty(id)) {
+          state.items[String(id)] = mergedItem
+        }
+      });
+    })
+  }
 });
 
 export { actions as devicesActions };

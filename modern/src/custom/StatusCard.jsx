@@ -12,16 +12,27 @@ import {
   TableRow,
   TableCell,
   CardMedia,
-  CardActions
+  CardActions,
+  Divider,
 } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import CloseIcon from '@mui/icons-material/Close';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import { useTranslation } from '../common/components/LocalizationProvider';
+import {
+  useLocalization,
+  useTranslation,
+} from '../common/components/LocalizationProvider';
 import PositionValue from '../common/components/PositionValue';
 import usePositionAttributes from '../common/attributes/usePositionAttributes';
 import { useAttributePreference } from '../common/util/preferences';
+import useDeviceAttributes from '../common/attributes/useDeviceAttributes';
+
+const getStatus = (arr, value, locale) => {
+  const finded = arr.find((item) => item?.value == value);
+  if (finded == null) return '';
+  return finded?.[`title_${locale}`] ?? finded?.title ?? '';
+};
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -64,7 +75,13 @@ const useStyles = makeStyles((theme) => ({
       paddingRight: 0,
     },
   },
+  row: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
   cell: {
+    maxWidth: '200px',
     borderBottom: 'none',
   },
   root: {
@@ -81,12 +98,12 @@ const StatusRow = ({ name, content }) => {
   const classes = useStyles();
 
   return (
-    <TableRow>
+    <TableRow className={classes.row}>
       <TableCell className={classes.cell}>
-        <Typography variant="body2">{name}</Typography>
+        <Typography variant='body2'>{name}</Typography>
       </TableCell>
       <TableCell className={classes.cell}>
-        <Typography variant="body2" color="textSecondary">
+        <Typography variant='body2' color='textSecondary'>
           {content}
         </Typography>
       </TableCell>
@@ -97,14 +114,47 @@ const StatusRow = ({ name, content }) => {
 const StatusCard = ({ deviceId, position, onClose }) => {
   const classes = useStyles();
   const t = useTranslation();
+  const { language } = useLocalization();
 
   const device = useSelector((state) => state.devices.items[deviceId]);
+  const transportationStatuses = useSelector(
+    (state) => state.dictionaries.transportationStatuses
+  );
+
+  const deviceStatuses = useSelector(
+    (state) => state.dictionaries.deviceStatuses
+  );
 
   const deviceImage = device?.attributes?.deviceImage;
 
   const positionAttributes = usePositionAttributes(t);
-  const positionItems = useAttributePreference('positionItems', 'speed,address,totalDistance,course');
+  const positionItems = useAttributePreference(
+    'positionItems',
+    'speed,address,totalDistance,course'
+  );
+
+  const deviceAttributes = useDeviceAttributes(t);
+  const deviceItems =
+    'transportationNumber,transportationStatus,seals.numberEns,informationSeal.statusEns,informationSeal.alarm,seals.positionsId.batteryLevel,seals.idFromTraccar,informationSeal.dateTimeActivation,informationSeal.dateTimeDeactivation,declaration.customsDeparture.name,declaration.customsDestination.name,phoneNumberDriver,declaration.transportationVehicle.plateNo';
+
   const navigate = useNavigate();
+
+  const getDeviceValue = (device, key) => {
+    const statuses = {
+      'informationSeal.statusEns': getStatus(
+        deviceStatuses,
+        device[key],
+        language
+      ),
+      transportationStatus: getStatus(
+        transportationStatuses,
+        device[key],
+        language
+      ),
+    };
+
+    return statuses.hasOwnProperty(key) ? statuses[key] : device?.[key] ?? '';
+  };
 
   return (
     <div className={classes.root}>
@@ -112,49 +162,91 @@ const StatusCard = ({ deviceId, position, onClose }) => {
         <Draggable handle={`.${classes.media}, .${classes.header}`}>
           <Card elevation={3} className={classes.card}>
             {deviceImage ? (
-              <CardMedia className={classes.media} image={`/api/media/${device.uniqueId}/${deviceImage}`}>
-                <IconButton size="small" onClick={onClose} onTouchStart={onClose}>
-                  <CloseIcon fontSize="small" className={classes.mediaButton} />
+              <CardMedia
+                className={classes.media}
+                image={`/api/media/${device.uniqueId}/${deviceImage}`}
+              >
+                <IconButton
+                  size='small'
+                  onClick={onClose}
+                  onTouchStart={onClose}
+                >
+                  <CloseIcon fontSize='small' className={classes.mediaButton} />
                 </IconButton>
               </CardMedia>
             ) : (
               <div className={classes.header}>
-                <Typography variant="body2" color="textSecondary">
-                  {device.name}
+                <Typography variant='body2' color='textSecondary'>
+                  {device?.['seals.numberEns'] ?? ''}
                 </Typography>
-                <IconButton size="small" onClick={onClose} onTouchStart={onClose}>
-                  <CloseIcon fontSize="small" />
+                <IconButton
+                  size='small'
+                  onClick={onClose}
+                  onTouchStart={onClose}
+                >
+                  <CloseIcon fontSize='small' />
                 </IconButton>
               </div>
             )}
-            {position && (
-              <CardContent className={classes.content}>
-                <Table size="small" classes={{ root: classes.table }}>
-                  <TableBody>
-                    {positionItems
+
+            <CardContent className={classes.content}>
+              <Table size='small' classes={{ root: classes.table }}>
+                <TableBody>
+                  {device &&
+                    deviceItems
                       .split(',')
-                      .filter((key) => position.hasOwnProperty(key) || position.attributes.hasOwnProperty(key))
+                      .filter((key) => device.hasOwnProperty(key))
                       .map((key) => (
                         <StatusRow
                           key={key}
-                          name={positionAttributes.hasOwnProperty(key) ? positionAttributes[key].name : key}
-                          content={(
-                            <PositionValue
-                              position={position}
-                              property={position.hasOwnProperty(key) ? key : null}
-                              attribute={position.hasOwnProperty(key) ? null : key}
-                            />
-                          )}
+                          name={
+                            deviceAttributes.hasOwnProperty(key)
+                              ? deviceAttributes[key].name
+                              : key
+                          }
+                          content={getDeviceValue(device, key)}
                         />
                       ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            )}
+
+                  <Divider sx={{ width: '100%', my: '10px' }} />
+
+                  {position &&
+                    positionItems
+                      .split(',')
+                      .filter(
+                        (key) =>
+                          position.hasOwnProperty(key) ||
+                          position.attributes.hasOwnProperty(key)
+                      )
+                      .map((key) => (
+                        <StatusRow
+                          key={key}
+                          name={
+                            positionAttributes.hasOwnProperty(key)
+                              ? positionAttributes[key].name
+                              : key
+                          }
+                          content={
+                            <PositionValue
+                              position={position}
+                              property={
+                                position.hasOwnProperty(key) ? key : null
+                              }
+                              attribute={
+                                position.hasOwnProperty(key) ? null : key
+                              }
+                            />
+                          }
+                        />
+                      ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+
             <CardActions classes={{ root: classes.actions }} disableSpacing>
               <IconButton
-                  onClick={() => navigate('/replay')}
-                  // disabled={disableActions || !position}
+                onClick={() => navigate('/replay')}
+                // disabled={disableActions || !position}
               >
                 <ReplayIcon />
               </IconButton>

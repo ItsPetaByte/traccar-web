@@ -16,6 +16,7 @@ import MapMobileGroupPositions from './MapMobileGroupPositions';
 const MainMap = ({
   filteredPositions,
   selectedPosition,
+  selectedMobileGroupPosition,
   mobileGroupsPositions,
 }) => {
   const dispatch = useDispatch();
@@ -36,6 +37,11 @@ const MainMap = ({
     [dispatch]
   );
 
+  const onMobileGroupClusterClick = useCallback(
+    () => dispatch(mobileGroupsActions.selectId(null)),
+    [dispatch]
+  );
+
   return (
     <>
       <MapView>
@@ -52,7 +58,8 @@ const MainMap = ({
         <MapMobileGroupPositions
           positions={mobileGroupsPositions}
           onClick={onMobileGroupMarkerClick}
-          selectedPosition={selectedPosition}
+          onClusterClick={onMobileGroupClusterClick}
+          selectedPosition={selectedMobileGroupPosition}
           showStatus
         />
         <MapSelectedDevice />

@@ -8,7 +8,7 @@ import { mapIconKey } from '../map/core/preloadImages';
 import { findFonts } from '../map/core/mapUtil';
 import { useAttributePreference, usePreference } from '../common/util/preferences';
 
-const MapMobileGroupPositions = ({ positions, onClick, showStatus, selectedPosition, titleField }) => {
+const MapMobileGroupPositions = ({ positions, onClick, onClusterClick, showStatus, selectedPosition, titleField }) => {
   const id = useId();
   const clusters = `${id}-clusters`;
   const selected = `${id}-selected`;
@@ -66,7 +66,7 @@ const MapMobileGroupPositions = ({ positions, onClick, showStatus, selectedPosit
     }
   }, [onClick]);
 
-  const onClusterClick = useCallback((event) => {
+  const onMapClusterClick = useCallback((event) => {
     event.preventDefault();
     const features = map.queryRenderedFeatures(event.point, {
       layers: [clusters],
@@ -80,6 +80,7 @@ const MapMobileGroupPositions = ({ positions, onClick, showStatus, selectedPosit
         });
       }
     });
+    if(onClusterClick) onClusterClick(clusterId)
   }, [clusters]);
 
   useEffect(() => {
@@ -160,13 +161,13 @@ const MapMobileGroupPositions = ({ positions, onClick, showStatus, selectedPosit
 
     map.on('mouseenter', clusters, onMouseEnter);
     map.on('mouseleave', clusters, onMouseLeave);
-    map.on('click', clusters, onClusterClick);
+    map.on('click', clusters, onMapClusterClick);
     map.on('click', onMapClick);
 
     return () => {
       map.off('mouseenter', clusters, onMouseEnter);
       map.off('mouseleave', clusters, onMouseLeave);
-      map.off('click', clusters, onClusterClick);
+      map.off('click', clusters, onMapClusterClick);
       map.off('click', onMapClick);
 
       if (map.getLayer(clusters)) {
@@ -189,7 +190,7 @@ const MapMobileGroupPositions = ({ positions, onClick, showStatus, selectedPosit
         }
       });
     };
-  }, [mapCluster, clusters, onMarkerClick, onClusterClick]);
+  }, [mapCluster, clusters, onMarkerClick, onMapClusterClick]);
 
   useEffect(() => {
     [id, selected].forEach((source) => {
@@ -206,7 +207,7 @@ const MapMobileGroupPositions = ({ positions, onClick, showStatus, selectedPosit
           })),
       });
     });
-  }, [mapCluster, clusters, onMarkerClick, onClusterClick, devices, positions, selectedPosition]);
+  }, [mapCluster, clusters, onMarkerClick, onMapClusterClick, devices, positions, selectedPosition]);
 
   return null;
 };
