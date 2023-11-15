@@ -12,6 +12,7 @@ import useFilter from '../main/useFilter';
 import MainMap from './MainMap';
 import MainToolbar from './MainToolbar';
 import { useAttributePreference } from '../common/util/preferences';
+import { mobileGroupsActions } from '../store/mobile-groups';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -114,7 +115,7 @@ const MainPage = () => {
       {selectedMobileGroupId && (
         <MobileGroupStatusCard
           position={selectedMobileGroupPosition}
-          onClose={() => dispatch(mobileGroupsPositions.selectId(null))}
+          onClose={() => dispatch(mobileGroupsActions.selectId(null))}
         />
       )}
     </div>
