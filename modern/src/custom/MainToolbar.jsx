@@ -1,18 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import {
-  Toolbar,
-  IconButton,
-  Tooltip,
-  Collapse,
-  Divider,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Box,
-} from '@mui/material';
+import { Autocomplete, Toolbar, IconButton, Tooltip, Collapse, Divider, TextField, Box } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -36,8 +25,14 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     padding: `${theme.spacing(1)} 0`,
   },
-  formControl: {
+  input: {
     minWidth: '300px',
+    '& .MuiFormLabel-root': {
+      top: '8%',
+    },
+    '& .MuiInputBase-root': {
+      minHeight: '50px',
+    },
   },
 }));
 
@@ -107,41 +102,33 @@ const MainToolbar = ({ filter, setFilter, setFilterMap }) => {
       <Collapse in={filterOpen} sx={{ width: '100%' }}>
         <Divider />
         <Box className={classes.toolbarRow}>
-          <Box display="flex" gap={1}>
-            <FormControl className={classes.formControl}>
-              <InputLabel>{t('deviceStatus')}</InputLabel>
-              <Select
-                label={t('deviceStatus')}
-                value={filter.statuses}
-                onChange={(e) => setFilter({ ...filter, statuses: e.target.value })}
-              >
-                <MenuItem value="online">{`${t('deviceStatusOnline')} (${deviceStatusCount('online')})`}</MenuItem>
-                <MenuItem value="offline">{`${t('deviceStatusOffline')} (${deviceStatusCount('offline')})`}</MenuItem>
-                <MenuItem value="unknown">{`${t('deviceStatusUnknown')} (${deviceStatusCount('unknown')})`}</MenuItem>
-                {/* {deviceStatuses?.map((item) => (
-                  <MenuItem key={item.id} value={item.id}>{item[`title_${language}`] || item.title}</MenuItem>
-                ))} */}
-              </Select>
-            </FormControl>
-            <FormControl className={classes.formControl}>
-              <InputLabel>{t('settingsGroups')}</InputLabel>
-              <Select
-                label={t('settingsGroups')}
-                value={filter.groups}
-                onChange={(e) => setFilter({ ...filter, groups: e.target.value })}
-              >
-                {Object.values(groups)
-                  .sort((a, b) => a.name.localeCompare(b.name))
-                  .map((group) => (
-                    <MenuItem key={group.id} value={group.id}>
-                      {group.name}
-                    </MenuItem>
-                  ))}
-                {/* {mobileGroupStatuses?.map((item) => (
-                  <MenuItem key={item.id} value={item.id}>{item[`title_${language}`] || item.title}</MenuItem>
-                ))} */}
-              </Select>
-            </FormControl>
+          <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} gap={1}>
+            <Autocomplete
+              multiple
+              className={classes.input}
+              options={[
+                { id: 'online', label: `${t('deviceStatusOnline')} (${deviceStatusCount('online')})` },
+                { id: 'offline', label: `${t('deviceStatusOffline')} (${deviceStatusCount('offline')})` },
+                { id: 'unknown', label: `${t('deviceStatusUnknown')} (${deviceStatusCount('unknown')})` },
+              ]}
+              value={filter.statuses}
+              onChange={(event, value) => {
+                setFilter({ ...filter, statuses: value });
+              }}
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              renderInput={(params) => <TextField {...params} label={t('deviceStatus')} />}
+            />
+            <Autocomplete
+              multiple
+              className={classes.input}
+              options={Object.values(groups)}
+              value={filter.groups}
+              onChange={(event, value) => {
+                setFilter({ ...filter, groups: value });
+              }}
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              renderInput={(params) => <TextField {...params} label={t('settingsGroups')} />}
+            />
           </Box>
         </Box>
       </Collapse>
