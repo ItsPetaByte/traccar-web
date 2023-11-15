@@ -134,11 +134,11 @@ export const getMobileGroupStatusColor = (status) => {
 
 export const getSealSvgIcon = (status) => {
   switch (status) {
-    case '3':
+    case 'deactivated':
       return 'truckBlue';
-    case '4':
+    case 'inTransit':
       return 'truckGreen';
-    case '5':
+    case 'alarm':
       return 'truckRed';
     default:
       return 'truckGrey';
