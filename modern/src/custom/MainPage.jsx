@@ -38,6 +38,7 @@ const MainPage = () => {
     (state) => state.mobileGroups.positions
   );
   const selectedDeviceId = useSelector((state) => state.devices.selectedId);
+  const devices = useSelector((state) => state.devices.items);
   const selectedMobileGroupId = useSelector(
     (state) => state.mobileGroups.selectedId
   );

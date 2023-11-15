@@ -12,6 +12,7 @@ import useFeatures from './common/util/useFeatures';
 import { useAttributePreference } from './common/util/preferences';
 import { useMobileGroupPositionsMutation } from './services/mobile-group';
 import { mobileGroupsActions } from './store/mobile-groups';
+import { useTransportationsMutation } from './services/transportation';
 
 const logoutCode = 4000;
 
@@ -20,6 +21,7 @@ const SocketController = () => {
   const navigate = useNavigate();
   const t = useTranslation();
   const [getMobileGroupPostitions] = useMobileGroupPositionsMutation();
+  const [getTransportations] = useTransportationsMutation();
 
   const authenticated = useSelector((state) => !!state.session.user);
   const devices = useSelector((state) => state.devices.items);
@@ -67,6 +69,7 @@ const SocketController = () => {
           const devicesResponse = await fetch('/api/devices');
           if (devicesResponse.ok) {
             dispatch(devicesActions.update(await devicesResponse.json()));
+            await getTransportations();
           }
           await fetchPositions();
           if (

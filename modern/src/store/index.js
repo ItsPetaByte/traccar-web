@@ -15,6 +15,7 @@ import { dictionariesReducer as dictionaries } from './dictionaries';
 import throttleMiddleware from './throttleMiddleware';
 import mobileGroupApi from '../services/mobile-group';
 import dictionariesApi from '../services/dictionaries';
+import transportationApi from '../services/transportation';
 
 const reducer = combineReducers({
   errors,
@@ -31,6 +32,7 @@ const reducer = combineReducers({
   dictionaries,
   [mobileGroupApi.reducerPath]: [mobileGroupApi.reducer],
   [dictionariesApi.reducerPath]: [dictionariesApi.reducer],
+  [transportationApi.reducerPath]: [transportationApi.reducer]
 });
 
 export { errorsActions } from './errors';
@@ -46,5 +48,5 @@ export { reportsActions } from './reports';
 
 export default configureStore({
   reducer,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(throttleMiddleware, mobileGroupApi.middleware, dictionariesApi.middleware),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(throttleMiddleware, mobileGroupApi.middleware, dictionariesApi.middleware, transportationApi.middleware),
 });
