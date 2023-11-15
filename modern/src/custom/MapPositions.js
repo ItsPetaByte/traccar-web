@@ -38,7 +38,6 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
         showDirection = selectedPositionId === position.id;
         break;
     }
-    console.log(device);
     return {
       id: position.id,
       deviceId: position.deviceId,
