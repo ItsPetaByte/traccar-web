@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
     gap: theme.spacing(1),
     width: '100%',
     padding: `${theme.spacing(1)} 0`,
+    color: '#fff',
   },
   input: {
     minWidth: '300px',
@@ -102,12 +103,12 @@ const MainToolbar = ({ filter, setFilter, filterMap, setFilterMap }) => {
   return (
     <Toolbar ref={toolbarRef} className={classes.toolbar}>
       <Box className={classes.toolbarRow}>
-        <IconButton edge="start" onClick={() => setFilterOpen(!filterOpen)}>
+        <IconButton color="inherit" edge="start" onClick={() => setFilterOpen(!filterOpen)}>
           <FilterAltIcon />
         </IconButton>
 
         <Tooltip arrow title={t('loginLogout')}>
-          <IconButton edge="end" onClick={handleLogout}>
+          <IconButton color="inherit" edge="end" onClick={handleLogout}>
             <LogoutIcon />
           </IconButton>
         </Tooltip>
