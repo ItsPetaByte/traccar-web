@@ -13,6 +13,7 @@ import {
   TableCell,
   CardMedia,
   CardActions,
+  Divider,
 } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import CloseIcon from '@mui/icons-material/Close';
@@ -80,6 +81,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
   },
   cell: {
+    maxWidth: '200px',
     borderBottom: 'none',
   },
   root: {
@@ -119,6 +121,10 @@ const StatusCard = ({ deviceId, position, onClose }) => {
     (state) => state.dictionaries.transportationStatuses
   );
 
+  const deviceStatuses = useSelector(
+    (state) => state.dictionaries.deviceStatuses
+  );
+
   const deviceImage = device?.attributes?.deviceImage;
 
   const positionAttributes = usePositionAttributes(t);
@@ -132,7 +138,23 @@ const StatusCard = ({ deviceId, position, onClose }) => {
     'transportationNumber,transportationStatus,seals.numberEns,informationSeal.statusEns,informationSeal.alarm,seals.positionsId.batteryLevel,seals.idFromTraccar,informationSeal.dateTimeActivation,informationSeal.dateTimeDeactivation,declaration.customsDeparture.name,declaration.customsDestination.name,phoneNumberDriver,declaration.transportationVehicle.plateNo';
 
   const navigate = useNavigate();
-  console.log(device);
+
+  const getDeviceValue = (device, key) => {
+    const statuses = {
+      'informationSeal.statusEns': getStatus(
+        deviceStatuses,
+        device[key],
+        language
+      ),
+      transportationStatus: getStatus(
+        transportationStatuses,
+        device[key],
+        language
+      ),
+    };
+
+    return statuses.hasOwnProperty(key) ? statuses[key] : device?.[key] ?? '';
+  };
 
   return (
     <div className={classes.root}>
@@ -168,10 +190,10 @@ const StatusCard = ({ deviceId, position, onClose }) => {
             )}
 
             <CardContent className={classes.content}>
-              {device && (
-                <Table size='small' classes={{ root: classes.table }}>
-                  <TableBody>
-                    {deviceItems
+              <Table size='small' classes={{ root: classes.table }}>
+                <TableBody>
+                  {device &&
+                    deviceItems
                       .split(',')
                       .filter((key) => device.hasOwnProperty(key))
                       .map((key) => (
@@ -182,24 +204,14 @@ const StatusCard = ({ deviceId, position, onClose }) => {
                               ? deviceAttributes[key].name
                               : key
                           }
-                          content={
-                            key === 'transportationStatus'
-                              ? getStatus(
-                                  transportationStatuses,
-                                  device[key],
-                                  language
-                                )
-                              : device[key]
-                          }
+                          content={getDeviceValue(device, key)}
                         />
                       ))}
-                  </TableBody>
-                </Table>
-              )}
-              {position && (
-                <Table size='small' classes={{ root: classes.table }}>
-                  <TableBody>
-                    {positionItems
+
+                  <Divider sx={{ width: '100%', my: '10px' }} />
+
+                  {position &&
+                    positionItems
                       .split(',')
                       .filter(
                         (key) =>
@@ -227,9 +239,8 @@ const StatusCard = ({ deviceId, position, onClose }) => {
                           }
                         />
                       ))}
-                  </TableBody>
-                </Table>
-              )}
+                </TableBody>
+              </Table>
             </CardContent>
 
             <CardActions classes={{ root: classes.actions }} disableSpacing>

@@ -31,55 +31,55 @@ export default (t) => useMemo(() => ({
     type: 'number',
   },
   transportationNumber: {
-    name: 'transportationNumber',
+    name: t('axelorTransportationNumber'),
     type: 'string'
   },
   transportationStatus: {
-    name: 'transportationStatus',
+    name: t('axelorTransportationStatus'),
     type: 'string'
   },
-  "seals.numberEns": {
-    name: 'seals.numberEns',
+  'seals.numberEns': {
+    name: t('axelorNumberEns'),
     type: 'string'
   },
-  "informationSeal.statusEns": {
-    name: 'transportationNumber',
+  'informationSeal.statusEns': {
+    name: t('axelorStatusEns'),
     type: 'string'
   },
-  "informationSeal.alarm": {
-    name: 'transportationNumber',
+  'informationSeal.alarm': {
+    name: t('axelorTypeOfAlarm'),
     type: 'string'
   },
-  "seals.positionsId.batteryLevel": {
-    name: 'transportationNumber',
+  'seals.positionsId.batteryLevel': {
+    name: t('axelorBatteryLevel'),
     type: 'string'
   },
-  "seals.idFromTraccar": {
-    name: 'transportationStatus',
+  'seals.idFromTraccar': {
+    name: t('axelorTraccarIdEns'),
     type: 'string'
   },
-  "informationSeal.dateTimeActivation": {
-    name: 'transportationStatus',
+  'informationSeal.dateTimeActivation': {
+    name: t('axelorDateTimeActivation'),
     type: 'string'
   },
-  "informationSeal.dateTimeDeactivation": {
-    name: 'transportationStatus',
+  'informationSeal.dateTimeDeactivation': {
+    name: t('axelorDateTimeDeactivation'),
     type: 'string'
   },
-  "declaration.customsDeparture.name": {
-    name: 'transportationNumber',
+  'declaration.customsDeparture.name': {
+    name: t('axelorCustomsDeparture'),
     type: 'string'
   },
-  "declaration.customsDestination.name": {
-    name: 'transportationStatus',
+  'declaration.customsDestination.name': {
+    name: t('axelorCustomsDestination'),
     type: 'string'
   },  
   phoneNumberDriver: {
-    name: 'transportationNumber',
+    name: t('axelorPhoneNumberDriver'),
     type: 'string'
   },
-  "declaration.transportationVehicle.plateNo" : {
-    name: 'transportationStatus',
+  'declaration.transportationVehicle.plateNo' : {
+    name: t('axelorDeclarationTransportationVehiclePlateNo'),
     type: 'string'
   },
 }), [t]);

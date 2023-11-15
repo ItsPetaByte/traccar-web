@@ -582,5 +582,18 @@
   "axelorMobileGroupStatus": "Топтун статусу",
   "axelorMobileGroupNumber": "Топтун номери",
   "axelorMobileGroupChiefInspector": "Башкы инспектор",
-  "axelorMobileGroupPhoneNumber": "Телефон номери"
+  "axelorMobileGroupPhoneNumber": "Телефон номери",
+  "axelorTransportationNumber": "Сапар номери",
+  "axelorTransportationStatus": "Сапар статусу",
+  "axelorNumberEns": "ЭНП номери",
+  "axelorStatusEns": "ЭНП статусу",
+  "axelorTypeOfAlarm": "Тревоганын түрү",
+  "axelorBatteryLevel": "Батареянын четкилиги",
+  "axelorTraccarIdEns": "Траккардагы ЭНП ID",
+  "axelorDateTimeActivation": "Иштөө дата жана убакты",
+  "axelorDateTimeDeactivation": "Иштөөнү токтотуу дата жана убакты",
+  "axelorCustomsDeparture": "Жөнөтүүчү бажы органы",
+  "axelorCustomsDestination": "Бажы органы",
+  "axelorPhoneNumberDriver": "Айдоочунун телефон номери",
+  "axelorDeclarationTransportationVehiclePlateNo": "АТС гос. номери"
 }
