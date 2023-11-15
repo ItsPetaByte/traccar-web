@@ -1,5 +1,5 @@
-import React from 'react';
-import Draggable from 'react-draggable';
+import React from "react";
+import Draggable from "react-draggable";
 import {
   Card,
   CardContent,
@@ -9,77 +9,77 @@ import {
   TableRow,
   TableCell,
   IconButton,
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import makeStyles from '@mui/styles/makeStyles';
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import makeStyles from "@mui/styles/makeStyles";
 import {
   useLocalization,
   useTranslation,
-} from '../common/components/LocalizationProvider';
-import { useSelector } from 'react-redux';
+} from "../common/components/LocalizationProvider";
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   card: {
-    pointerEvents: 'auto',
+    pointerEvents: "auto",
     width: theme.dimensions.popupMaxWidth,
   },
   media: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    alignItems: 'flex-start',
+    display: "flex",
+    justifyContent: "flex-end",
+    alignItems: "flex-start",
   },
   mediaButton: {
     color: theme.palette.primary.contrastText,
-    mixBlendMode: 'difference',
+    mixBlendMode: "difference",
   },
   header: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
     padding: theme.spacing(1, 1, 0, 2),
   },
   content: {
     paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(1),
     maxHeight: theme.dimensions.cardContentMaxHeight,
-    overflow: 'auto',
+    overflow: "auto",
   },
   delete: {
     color: theme.palette.error.main,
   },
   icon: {
-    width: '25px',
-    height: '25px',
-    filter: 'brightness(0) invert(1)',
+    width: "25px",
+    height: "25px",
+    filter: "brightness(0) invert(1)",
   },
   table: {
-    '& .MuiTableCell-sizeSmall': {
+    "& .MuiTableCell-sizeSmall": {
       paddingLeft: 0,
       paddingRight: 0,
     },
   },
   cell: {
-    borderBottom: 'none',
+    borderBottom: "none",
   },
   actions: {
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
   root: ({ desktopPadding }) => ({
-    pointerEvents: 'none',
-    position: 'fixed',
+    pointerEvents: "none",
+    position: "fixed",
     zIndex: 5,
-    left: '50%',
-    [theme.breakpoints.up('md')]: {
+    left: "50%",
+    [theme.breakpoints.up("md")]: {
       left: `calc(50% + ${desktopPadding} / 2)`,
       bottom: theme.spacing(3),
     },
-    [theme.breakpoints.down('md')]: {
-      left: '50%',
+    [theme.breakpoints.down("md")]: {
+      left: "50%",
       bottom: `calc(${theme.spacing(3)} + ${
         theme.dimensions.bottomBarHeight
       }px)`,
     },
-    transform: 'translateX(-50%)',
+    transform: "translateX(-50%)",
   }),
 }));
 
@@ -89,10 +89,10 @@ const StatusRow = ({ name, content }) => {
   return (
     <TableRow>
       <TableCell className={classes.cell}>
-        <Typography variant='body2'>{name}</Typography>
+        <Typography variant="body2">{name}</Typography>
       </TableCell>
       <TableCell className={classes.cell}>
-        <Typography variant='body2' color='textSecondary'>
+        <Typography variant="body2" color="textSecondary">
           {content}
         </Typography>
       </TableCell>
@@ -109,30 +109,30 @@ const MobileGroupStatusCard = ({ position, onClose, desktopPadding = 0 }) => {
   );
 
   const groupStatus = mobileGroupStatuses.find(
-    (item) => item?.value == position?.['mobileGroup.groupStatus']
+    (item) => item?.value == position?.["mobileGroup.groupStatus"]
   );
 
-  const groupNumber = position?.['mobileGroup.groupNumber'];
+  const groupNumber = position?.["mobileGroup.groupNumber"];
   const groupRole =
-    position?.['mobileGroup.groupInspector.jobTitleFunction.name'];
-  const groupPhoneNumber = position?.['mobileGroup.groupInspector.mobilePhone'];
+    position?.["mobileGroup.groupInspector.jobTitleFunction.name"];
+  const groupPhoneNumber = position?.["mobileGroup.groupInspector.mobilePhone"];
 
   const rows = [
     {
-      name: t('axelorMobileGroupStatus'),
-      content: groupStatus?.[`title_${language}`] ?? groupStatus?.title ?? '',
+      name: t("axelorMobileGroupStatus"),
+      content: groupStatus?.[`title_${language}`] ?? groupStatus?.title ?? "",
     },
     {
-      name: t('axelorMobileGroupNumber'),
-      content: groupNumber ?? '',
+      name: t("axelorMobileGroupNumber"),
+      content: groupNumber ?? "",
     },
     {
-      name: t('axelorMobileGroupChiefInspector'),
-      content: groupRole ?? '',
+      name: t("axelorMobileGroupChiefInspector"),
+      content: groupRole ?? "",
     },
     {
-      name: t('axelorMobileGroupPhoneNumber'),
-      content: groupPhoneNumber ?? '',
+      name: t("axelorMobileGroupPhoneNumber"),
+      content: groupPhoneNumber ?? "",
     },
   ];
 
@@ -141,15 +141,15 @@ const MobileGroupStatusCard = ({ position, onClose, desktopPadding = 0 }) => {
       <Draggable handle={`.${classes.media}, .${classes.header}`}>
         <Card elevation={3} className={classes.card}>
           <div className={classes.header}>
-            <div>{groupNumber ?? ''}</div>
-            <IconButton size='small' onClick={onClose} onTouchStart={onClose}>
-              <CloseIcon fontSize='small' />
+            <div>{groupNumber ?? ""}</div>
+            <IconButton size="small" onClick={onClose} onTouchStart={onClose}>
+              <CloseIcon fontSize="small" />
             </IconButton>
           </div>
 
           {position && (
             <CardContent className={classes.content}>
-              <Table size='small' classes={{ root: classes.table }}>
+              <Table size="small" classes={{ root: classes.table }}>
                 <TableBody>
                   {rows.map(({ name, content }, index) => (
                     <StatusRow key={index} name={name} content={content} />
