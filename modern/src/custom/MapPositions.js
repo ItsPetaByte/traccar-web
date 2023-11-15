@@ -2,9 +2,9 @@ import { useId, useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/styles';
+import {mapIconKey} from '../map/core/preloadImages';
 import { map } from './MapView';
-import { formatTime, getStatusColor } from '../common/util/formatter';
-import { mapIconKey } from '../map/core/preloadImages';
+import {formatTime, getMobileGroupStatusColor, getSealSvgIcon, getStatusColor} from '../common/util/formatter';
 import { findFonts } from '../map/core/mapUtil';
 import { useAttributePreference, usePreference } from '../common/util/preferences';
 
@@ -41,10 +41,10 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
     return {
       id: position.id,
       deviceId: position.deviceId,
-      name: device.name,
+      name: device.uniqueId || device.name,
       fixTime: formatTime(position.fixTime, 'seconds', hours12),
-      category: mapIconKey(device.category),
-      color: showStatus ? position.attributes.color || getStatusColor(device.status) : 'neutral',
+      category: mapIconKey(getSealSvgIcon(device['transportationStatus'])),
+      color: 'neutral',
       rotation: position.course,
       direction: showDirection,
     };

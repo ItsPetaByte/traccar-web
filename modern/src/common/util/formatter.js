@@ -115,6 +115,36 @@ export const getStatusColor = (status) => {
   }
 };
 
+export const getMobileGroupStatusColor = (status) => {
+  switch (String(status)) {
+    case '1':
+      return 'success';
+    case '2':
+      return 'warning';
+    case '3':
+      return 'success';
+    case '4':
+      return 'info';
+    case '5':
+      return 'error';
+    default:
+      return 'neutral';
+  }
+};
+
+export const getSealSvgIcon = (status) => {
+  switch (status) {
+    case '3':
+      return 'truckBlue';
+    case '4':
+      return 'truckGreen';
+    case '5':
+      return 'truckRed';
+    default:
+      return 'truckGrey';
+  }
+};
+
 export const getBatteryStatus = (batteryLevel) => {
   if (batteryLevel >= 70) {
     return 'success';
