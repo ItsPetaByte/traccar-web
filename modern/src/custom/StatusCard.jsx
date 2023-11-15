@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import CloseIcon from '@mui/icons-material/Close';
+import LaunchIcon from '@mui/icons-material/Launch';
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -208,6 +209,18 @@ const StatusCard = ({ deviceId, position, onClose }) => {
               >
                 <ReplayIcon />
               </IconButton>
+
+              { device.tripId && (
+                  <IconButton
+                    onClick={() => {
+                      window.open(`https://${import.meta.env.APP_AXE_DOMAIN}/#/ds/ens.transportation-trip.action-view/edit/${device.tripId}`);
+                      onClose();
+                    }}
+                  >
+                    <LaunchIcon />
+                  </IconButton>
+                )
+              }
             </CardActions>
           </Card>
         </Draggable>
