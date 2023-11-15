@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Autocomplete, Toolbar, IconButton, Tooltip, Collapse, Divider, TextField, Box } from '@mui/material';
@@ -50,12 +50,20 @@ const MainToolbar = ({ filter, setFilter, setFilterMap }) => {
   const mobileGroupStatuses = useSelector((state) => state.dictionaries.mobileGroupStatuses);
   const groups = useSelector((state) => state.groups.items);
   const devices = useSelector((state) => state.devices.items);
-
-  const [filterOpen, setFilterOpen] = useState(false);
+  const deviceStatusCount = (status) => Object.values(devices).filter((d) => d.status === status).length;
 
   const toolbarRef = useRef();
 
-  const deviceStatusCount = (status) => Object.values(devices).filter((d) => d.status === status).length;
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [deviceStatusOptions, setDeviceStatusOptions] = useState([]);
+
+  useEffect(() => {
+    setDeviceStatusOptions([
+      { id: 'online', label: `${t('deviceStatusOnline')} (${deviceStatusCount('online')})` },
+      { id: 'offline', label: `${t('deviceStatusOffline')} (${deviceStatusCount('offline')})` },
+      { id: 'unknown', label: `${t('deviceStatusUnknown')} (${deviceStatusCount('unknown')})` },
+    ]);
+  }, [devices]);
 
   const handleLogout = async () => {
     const notificationToken = window.localStorage.getItem('notificationToken');
@@ -106,14 +114,11 @@ const MainToolbar = ({ filter, setFilter, setFilterMap }) => {
             <Autocomplete
               multiple
               className={classes.input}
-              options={[
-                { id: 'online', label: `${t('deviceStatusOnline')} (${deviceStatusCount('online')})` },
-                { id: 'offline', label: `${t('deviceStatusOffline')} (${deviceStatusCount('offline')})` },
-                { id: 'unknown', label: `${t('deviceStatusUnknown')} (${deviceStatusCount('unknown')})` },
-              ]}
-              value={filter.statuses}
+              options={deviceStatusOptions}
+              value={deviceStatusOptions.filter((f) => filter.statuses.some((s) => s === f.id))}
               onChange={(event, value) => {
-                setFilter({ ...filter, statuses: value });
+                const ids = value.map((item) => item?.id || item);
+                setFilter({ ...filter, statuses: ids });
               }}
               // eslint-disable-next-line react/jsx-props-no-spreading
               renderInput={(params) => <TextField {...params} label={t('deviceStatus')} />}
