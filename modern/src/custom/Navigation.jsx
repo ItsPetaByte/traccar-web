@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { LinearProgress } from '@mui/material';
+import ReplayPage from './ReplayPage';
 import MainPage from './MainPage';
 import LoginPage from '../login/LoginPage';
 import useQuery from '../common/util/useQuery';
@@ -52,6 +53,7 @@ const Navigation = () => {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/" element={<App />}>
         <Route index element={<MainPage />} />
+        <Route path="replay" element={<ReplayPage />} />
       </Route>
     </Routes>
   );

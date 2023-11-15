@@ -1,3 +1,4 @@
+import ReplayIcon from '@mui/icons-material/Replay';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import Draggable from 'react-draggable';
@@ -11,9 +12,11 @@ import {
   TableRow,
   TableCell,
   CardMedia,
+  CardActions
 } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import CloseIcon from '@mui/icons-material/Close';
+import {useNavigate} from 'react-router-dom';
 
 import { useTranslation } from '../common/components/LocalizationProvider';
 import PositionValue from '../common/components/PositionValue';
@@ -101,6 +104,7 @@ const StatusCard = ({ deviceId, position, onClose }) => {
 
   const positionAttributes = usePositionAttributes(t);
   const positionItems = useAttributePreference('positionItems', 'speed,address,totalDistance,course');
+  const navigate = useNavigate();
 
   return (
     <div className={classes.root}>
@@ -147,6 +151,14 @@ const StatusCard = ({ deviceId, position, onClose }) => {
                 </Table>
               </CardContent>
             )}
+            <CardActions classes={{ root: classes.actions }} disableSpacing>
+              <IconButton
+                  onClick={() => navigate('/replay')}
+                  // disabled={disableActions || !position}
+              >
+                <ReplayIcon />
+              </IconButton>
+            </CardActions>
           </Card>
         </Draggable>
       )}
