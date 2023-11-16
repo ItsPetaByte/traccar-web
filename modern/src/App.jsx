@@ -22,6 +22,8 @@ const useStyles = makeStyles(() => ({
 }));
 
 const App = () => {
+  console.log(`[+] APP VERSION ${import.meta.env.APP_VERSION}`);
+
   const classes = useStyles();
   const theme = useTheme();
   const dispatch = useDispatch();
@@ -46,7 +48,9 @@ const App = () => {
     return null;
   }, [initialized]);
 
-  return !initialized ? (<LinearProgress />) : (
+  return !initialized ? (
+    <LinearProgress />
+  ) : (
     <>
       <AxelorAuthController />
       <SocketController />

@@ -9,10 +9,10 @@ export default defineConfig(() => ({
   server: {
     port: 3000,
     proxy: {
-      '/api/socket': `ws://${process.env.APP_DOMAIN}:8082`,
+      '/api/socket': `ws://${process.env.APP_DOMAIN}`,
       '/api': `https://${process.env.APP_DOMAIN}`,
       '/axelor-api': {
-        target: `https://${process.env.APP_AXE_DOMAIN}`,
+        target: `${process.env.APP_AXE_DOMAIN}`,
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/axelor-api/, ''),
       },
@@ -20,6 +20,7 @@ export default defineConfig(() => ({
   },
   define: {
     'import.meta.env.APP_AXE_DOMAIN': JSON.stringify(process.env.APP_AXE_DOMAIN),
+    'import.meta.env.APP_VERSION': "0.0.1",
   },
   build: {
     outDir: 'build',

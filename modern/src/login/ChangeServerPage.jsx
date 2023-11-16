@@ -2,7 +2,11 @@ import React from 'react';
 import ElectricalServicesIcon from '@mui/icons-material/ElectricalServices';
 import { makeStyles } from '@mui/styles';
 import {
-  Autocomplete, Button, Container, createFilterOptions, TextField,
+  Autocomplete,
+  Button,
+  Container,
+  createFilterOptions,
+  TextField,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from '../common/components/LocalizationProvider';
@@ -17,6 +21,7 @@ const officialServers = [
   'https://demo4.traccar.org',
   'https://server.traccar.org',
   'http://localhost:8082',
+  'http://localhost:8080',
   'http://localhost:3000',
 ];
 
@@ -53,13 +58,15 @@ const ChangeServerPage = () => {
   };
 
   return (
-    <Container maxWidth="xs" className={classes.container}>
+    <Container maxWidth='xs' className={classes.container}>
       <ElectricalServicesIcon className={classes.icon} />
       <Autocomplete
         freeSolo
         className={classes.field}
         options={officialServers}
-        renderInput={(params) => <TextField {...params} label={t('settingsServer')} />}
+        renderInput={(params) => (
+          <TextField {...params} label={t('settingsServer')} />
+        )}
         value={currentServer}
         onChange={(_, value) => value && handleSubmit(value)}
         filterOptions={(options, params) => {
@@ -70,10 +77,7 @@ const ChangeServerPage = () => {
           return filtered;
         }}
       />
-      <Button
-        onClick={() => navigate(-1)}
-        color="secondary"
-      >
+      <Button onClick={() => navigate(-1)} color='secondary'>
         {t('sharedCancel')}
       </Button>
     </Container>
