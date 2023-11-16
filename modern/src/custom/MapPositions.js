@@ -43,7 +43,7 @@ const MapPositions = ({ positions, onClick, showStatus, selectedPosition, titleF
       deviceId: position.deviceId,
       name: device.uniqueId || device.name,
       fixTime: formatTime(position.fixTime, 'seconds', hours12),
-      category: mapIconKey(getSealSvgIcon(device['transportationStatus'])),
+      category: mapIconKey(getSealSvgIcon(device['informationSeal.statusEns'])),
       color: 'neutral',
       rotation: position.course,
       direction: showDirection,

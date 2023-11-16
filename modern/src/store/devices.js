@@ -36,7 +36,7 @@ const { reducer, actions } = createSlice({
       action.payload?.data.forEach((item) => {
         const id = item?.['seals.idFromTraccar'];
         const originItem = state.items[id];
-        const mergedItem = {...item, ...originItem};
+        const mergedItem = {...item, ...originItem, tripId: item.id};
         if(id && state.items.hasOwnProperty(id)) {
           state.items[String(id)] = mergedItem
         }
