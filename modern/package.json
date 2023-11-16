@@ -40,7 +40,8 @@
   },
   "scripts": {
     "start": "vite",
-    "build": "vite build",
+    "build": "vite build --config ./vite.config.js",
+    "buildServer": "vite build --config ./vite.production.config.js",
     "generate-pwa-assets": "pwa-assets-generator --preset minimal public/logo.svg",
     "lint": "eslint .",
     "lint:fix": "eslint --fix --ext .js ."
