@@ -1,4 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { http } from "./AxelorFetchService";
+
 
 const mobileGroupApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: "axelor-api" }),
@@ -6,10 +8,7 @@ const mobileGroupApi = createApi({
   endpoints: (builder) => ({
     mobileGroupPositions: builder.mutation({
       query: () => ({
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: "Basic YWRtaW46QWRtaW4yMDIz",
-        },
+        headers: http.headers,
         url: "ws/rest/com.axelor.apps.ens.db.MobileGroupPosition/search",
         method: "POST",
         body: JSON.stringify({

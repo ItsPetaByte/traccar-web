@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { http } from "./AxelorFetchService";
 
 const transportationApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: "axelor-api" }),
@@ -6,10 +7,7 @@ const transportationApi = createApi({
   endpoints: (builder) => ({
     transportations: builder.mutation({
       query: () => ({
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: "Basic YWRtaW46QWRtaW4yMDIz",
-        },
+        headers: http.headers,
         url: "ws/rest/com.axelor.apps.ens.db.TransportationTrip/search",
         method: "POST",
         body: JSON.stringify({

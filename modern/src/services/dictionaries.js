@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { http } from "./AxelorFetchService";
 
 const dictionariesApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: "axelor-api" }),
@@ -6,10 +7,7 @@ const dictionariesApi = createApi({
   endpoints: (builder) => ({
     mobileGroupStatuses: builder.mutation({
       query: () => ({
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: "Basic YWRtaW46QWRtaW4yMDIz",
-        },
+        headers: http.headers,
         url: "ws/selection/ens.mobile.group.status.select",
         method: "POST",
         body: JSON.stringify({
@@ -19,10 +17,7 @@ const dictionariesApi = createApi({
     }),
     mobileGroupCarTypes: builder.mutation({
         query: () => ({
-          headers: {
-              "Content-Type": "application/json",
-              Authorization: "Basic YWRtaW46QWRtaW4yMDIz",
-          },
+          headers: http.headers,
           url: "ws/selection/ens.mobile.group.car.model.select",
           method: "POST",
           body: JSON.stringify({
@@ -32,10 +27,7 @@ const dictionariesApi = createApi({
     }),
     transportationStatuses: builder.mutation({
       query: () => ({
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: "Basic YWRtaW46QWRtaW4yMDIz",
-        },
+        headers: http.headers,
         url: "ws/selection/ens.transportation.status.select",
         method: "POST",
         body: JSON.stringify({
@@ -45,10 +37,7 @@ const dictionariesApi = createApi({
     }),
     deviceStatuses: builder.mutation({
       query: () => ({
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: "Basic YWRtaW46QWRtaW4yMDIz",
-        },
+        headers: http.headers,
         url: "ws/selection/ens.status.select",
         method: "POST",
         body: JSON.stringify({
