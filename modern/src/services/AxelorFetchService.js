@@ -22,18 +22,12 @@ class AxelorFetchService {
 
     // this.setCookie('JSESSIONID', JSESSIONID, 1, '/', import.meta.env.APP_AXE_DOMAIN);
 
-
     const { TOKEN, 'CSRF-TOKEN': CSRF_TOKEN, JSESSIONID } = args;
-
-    const csrfToken = this.setCookie('CSRF-TOKEN', CSRF_TOKEN, 1, '/', import.meta.env.APP_AXE_DOMAIN);
-
-    console.log(csrfToken, 'csrfToken');
 
     this.headers = {
       Authorization: `Basic ${TOKEN}`,
-      'Content-Type': 'application/json',
-      // 'X-CSRF-TOKEN': CSRF_TOKEN,
-      Cookie: csrfToken,
+      'Content-Type': 'text/plain;json'
+      // 'X-CSRF-Token': CSRF_TOKEN,
     };
   }
 
