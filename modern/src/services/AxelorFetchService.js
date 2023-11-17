@@ -27,8 +27,8 @@ class AxelorFetchService {
     };
 
 
-    this.setCookie('JSESSIONID', JSESSIONID, 1);
-    this.setCookie('CSRF-TOKEN', CSRF_TOKEN, 1);
+    this.setCookie('JSESSIONID', JSESSIONID, 1, '/', import.meta.env.APP_AXE_DOMAIN);
+    this.setCookie('CSRF-TOKEN', CSRF_TOKEN, 1, '/', import.meta.env.APP_AXE_DOMAIN);
 
   }
 
