@@ -38,7 +38,7 @@ const AxelorAuthController = () => {
         headers: { 
           'Content-Type': 'application/json',
            Authorization: `Basic ${token?.TOKEN }`,
-           'X-CSRF-TOKEN': token?.['CSRF-TOKEN'] 
+           // 'X-CSRF-TOKEN': token?.['CSRF-TOKEN']
           },
         body: JSON.stringify({ translate: true }),
       });

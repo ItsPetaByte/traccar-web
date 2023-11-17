@@ -20,7 +20,10 @@ class AxelorFetchService {
 
   initAuthHeaders(args) {
     const { TOKEN, 'CSRF-TOKEN': CSRF_TOKEN } = args;
-    this.headers = { Authorization: `Basic ${TOKEN}`, 'X-CSRF-TOKEN': CSRF_TOKEN };
+    this.headers = {
+      Authorization: `Basic ${TOKEN}`,
+      // 'X-CSRF-TOKEN': CSRF_TOKEN
+    };
   }
 
   set headers(headers) {
