@@ -9,21 +9,8 @@ const mobileGroupApi = createApi({
     mobileGroupPositions: builder.mutation({
       query: () => ({
         headers: http.headers,
-        url: "ws/rest/com.axelor.apps.ens.db.MobileGroupPosition/search",
-        method: "POST",
-        body: JSON.stringify({
-            offset: 0,
-            limit: 500,
-            fields: [
-              "mobileGroup.groupNumber",                    
-              "mobileGroup.groupStatus",                        
-              "mobileGroup.groupInspector.fullName",         
-              "mobileGroup.groupInspector.mobilePhone",          
-              "mobileGroup.groupInspector.jobTitleFunction.name",  
-              "latitude",
-              "longitude",
-            ]
-        }),
+        url: "ws/mobile-position/getCoordinates",
+        method: "POST"
       }),
     }),
   }),
