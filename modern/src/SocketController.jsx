@@ -20,7 +20,7 @@ const SocketController = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const t = useTranslation();
-  const [getMobileGroupPostitions] = useMobileGroupPositionsMutation();
+  const [getMobileGroupPositions] = useMobileGroupPositionsMutation();
   const [getTransportations] = useTransportationsMutation();
 
   const authenticated = useSelector((state) => !!state.session.user);
@@ -40,18 +40,14 @@ const SocketController = () => {
 
   const fetchPositions = async () => {
     const positionsResponse = await fetch('/api/positions');
-    let mobilePostionGroupResponse = null;
-    try {
-      mobilePostionGroupResponse = await getMobileGroupPostitions();
-    }
-    catch (e) {}
-    if (Array.isArray(mobilePostionGroupResponse?.data?.data)) {
-      dispatch(
-        mobileGroupsActions.updatePositions(
-          mobilePostionGroupResponse?.data?.data
-        )
-      );
-    }
+    // const mobilePositionGroupResponse = await getMobileGroupPositions();
+    // if (Array.isArray(mobilePositionGroupResponse?.data?.data)) {
+    //   dispatch(
+    //     mobileGroupsActions.updatePositions(
+    //       mobilePositionGroupResponse?.data?.data
+    //     )
+    //   );
+    // }
     if (positionsResponse.ok) {
       dispatch(sessionActions.updatePositions(await positionsResponse.json()));
     }
@@ -82,7 +78,6 @@ const SocketController = () => {
 
     socket.onclose = async (event) => {
       dispatch(sessionActions.updateSocket(false));
-      console.log(axelorAuthenticated, 'log');
       if (event.code !== logoutCode && axelorAuthenticated) {
         try {
           const devicesStatus = await fetchDevices();
