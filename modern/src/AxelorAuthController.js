@@ -40,8 +40,7 @@ const AxelorAuthController = () => {
 
       if (response.ok) {
         const {headers} = response;
-        console.log(headers, 'headers');
-        console.log(response, "data");
+        http.initAuthHeaders({});
       } else {
         throw Error(await response.text());
       }
