@@ -12,7 +12,7 @@ export default defineConfig(() => ({
       '/api/socket': `ws://${process.env.APP_DOMAIN}:8082`,
       '/api': `https://${process.env.APP_DOMAIN}`,
       '/axelor-api': {
-        target: `https://${process.env.APP_AXE_DOMAIN}`,
+        target: `http://${process.env.APP_AXE_DOMAIN}`,
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/axelor-api/, ''),
       },

@@ -23,7 +23,7 @@ class AxelorFetchService {
     this.headers = {
       Authorization: `Basic ${TOKEN}`,
       'Content-Type': 'application/json',
-      'X-CSRF-TOKEN': CSRF_TOKEN
+      // 'X-CSRF-TOKEN': CSRF_TOKEN
     };
   }
 
