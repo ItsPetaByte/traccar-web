@@ -35,7 +35,7 @@ const AxelorAuthController = () => {
         headers: {
           'Content-Type': 'application/json;',
         },
-        body: JSON.stringify(user),
+        body: user,
       });
 
       if (response.ok) {
