@@ -34,7 +34,6 @@ const AxelorAuthController = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json;',
-          Authorization: `${btoa('admin:Admin2023')}}`
         },
         body: JSON.stringify(user),
       });
