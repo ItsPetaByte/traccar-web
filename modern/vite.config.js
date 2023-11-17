@@ -20,7 +20,6 @@ export default defineConfig(() => ({
   },
   define: {
     'import.meta.env.APP_AXE_DOMAIN': JSON.stringify(process.env.APP_AXE_DOMAIN),
-    'import.meta.env.APP_VERSION': "0.0.1",
   },
   build: {
     outDir: 'build',
