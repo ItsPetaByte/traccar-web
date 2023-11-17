@@ -15,20 +15,33 @@ class AxelorFetchService {
   }
 
   get headers() {
-    return this.options?.headers ?? {}
+    return this.options?.headers ?? {};
   }
 
   initAuthHeaders(args) {
-    const { TOKEN, 'CSRF-TOKEN': CSRF_TOKEN } = args;
+    const { TOKEN, 'CSRF-TOKEN': CSRF_TOKEN, 'JSESSIONID': JSESSIONID } = args;
     this.headers = {
       Authorization: `Basic ${TOKEN}`,
       // 'Content-Type': 'application/json',
       // 'X-CSRF-TOKEN': CSRF_TOKEN
     };
+
+
+    this.setCookie('JSESSIONID', JSESSIONID, 1);
+    this.setCookie('CSRF-TOKEN', CSRF_TOKEN, 1);
+
   }
 
   set headers(headers) {
     this.options.headers = { ...this.options.headers, ...headers };
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  setCookie(name, value, daysToExpire, path = '/', domain = '') {
+    const date = new Date();
+    date.setTime(date.getTime() + (daysToExpire * 24 * 60 * 60 * 1000));
+    const expires = `expires=${date.toUTCString()}`;
+    document.cookie = `${name}=${value}; ${expires}; path=${path}; domain=${domain}`;
   }
 
   buildOptions(options) {
