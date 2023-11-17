@@ -19,16 +19,20 @@ class AxelorFetchService {
   }
 
   initAuthHeaders(args) {
-    const { TOKEN, 'CSRF-TOKEN': CSRF_TOKEN, 'JSESSIONID': JSESSIONID } = args;
+
+    // this.setCookie('JSESSIONID', JSESSIONID, 1, '/', import.meta.env.APP_AXE_DOMAIN);
+    const csrfToken = this.setCookie('CSRF-TOKEN', CSRF_TOKEN, 1, '/', import.meta.env.APP_AXE_DOMAIN);
+
+    console.log(csrfToken, 'csrfToken');
+
+    const { TOKEN, 'CSRF-TOKEN': CSRF_TOKEN, JSESSIONID } = args;
     this.headers = {
       Authorization: `Basic ${TOKEN}`,
-      // 'Content-Type': 'application/json',
-      // 'X-CSRF-TOKEN': CSRF_TOKEN
+      'Content-Type': 'application/json',
+      // 'X-CSRF-TOKEN': CSRF_TOKEN,
+      Cookie: csrfToken,
     };
 
-
-    this.setCookie('JSESSIONID', JSESSIONID, 1, '/', import.meta.env.APP_AXE_DOMAIN);
-    this.setCookie('CSRF-TOKEN', CSRF_TOKEN, 1, '/', import.meta.env.APP_AXE_DOMAIN);
 
   }
 
@@ -41,7 +45,7 @@ class AxelorFetchService {
     const date = new Date();
     date.setTime(date.getTime() + (daysToExpire * 24 * 60 * 60 * 1000));
     const expires = `expires=${date.toUTCString()}`;
-    document.cookie = `${name}=${value}; ${expires}; path=${path}; domain=${domain}`;
+    return `${name}=${value}; ${expires}; path=${path}; domain=${domain}`;
   }
 
   buildOptions(options) {
