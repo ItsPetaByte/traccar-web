@@ -40,14 +40,14 @@ const SocketController = () => {
 
   const fetchPositions = async () => {
     const positionsResponse = await fetch('/api/positions');
-    // const mobilePositionGroupResponse = await getMobileGroupPositions();
-    // if (Array.isArray(mobilePositionGroupResponse?.data?.data)) {
-    //   dispatch(
-    //     mobileGroupsActions.updatePositions(
-    //       mobilePositionGroupResponse?.data?.data
-    //     )
-    //   );
-    // }
+    const mobilePositionGroupResponse = await getMobileGroupPositions();
+    if (Array.isArray(mobilePositionGroupResponse?.data?.data)) {
+      dispatch(
+        mobileGroupsActions.updatePositions(
+          mobilePositionGroupResponse?.data?.data
+        )
+      );
+    }
     if (positionsResponse.ok) {
       dispatch(sessionActions.updatePositions(await positionsResponse.json()));
     }
