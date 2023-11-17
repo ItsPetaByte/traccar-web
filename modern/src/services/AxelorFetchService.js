@@ -22,18 +22,33 @@ class AxelorFetchService {
 
     console.log(document.cookie);
 
-    const csrfToken = document.cookie.split('; ').find((row) => row.startsWith('CSRF-TOKEN')).split('=')[1];
-    const JSESSIONID = document.cookie.split('; ').find((row) => row.startsWith('JSESSIONID')).split('=')[1];
+    const csrfToken = this.getCookie('CSRF-TOKEN');
+    const JSESSIONID = this.getCookie('CSRF-JSESSIONID');
 
     // const { TOKEN, 'CSRF-TOKEN': CSRF_TOKEN } = args;
 
     this.headers = {
       // Authorization: `Basic ${TOKEN}`,
       'Content-Type': 'application/json',
-      Authorization: `Basic YWRtaW46QWRtaW4yMDIz`,
+      Authorization: 'Basic YWRtaW46QWRtaW4yMDIz',
       Cookie: `CSRF-TOKEN=${csrfToken}; JSESSIONID=${JSESSIONID}`,
       // 'X-CSRF-Token': CSRF_TOKEN,
     };
+  }
+
+  getCookie(cookieName) {
+    const name = `${cookieName }=`;
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const cookieArray = decodedCookie.split(';');
+
+    for (let i = 0; i < cookieArray.length; i++) {
+      const cookie = cookieArray[i].trim();
+      if (cookie.indexOf(name) === 0) {
+        return cookie.substring(name.length, cookie.length);
+      }
+    }
+
+    return null; // Return null if the cookie with the specified name is not found
   }
 
   set headers(headers) {
