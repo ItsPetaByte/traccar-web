@@ -5,7 +5,7 @@ import { useEffectAsync } from './reactHelper';
 
 const AxelorAuthController = () => {
   const authenticated = useSelector((state) => !!state.session.user);
-  const token = useSelector((state) => state.session?.axelor);
+  // const token = useSelector((state) => state.session?.axelor);
   const dispatch = useDispatch();
 
   const user = { username: 'admin', password: 'Admin2023' };
@@ -31,25 +31,25 @@ const AxelorAuthController = () => {
     }
   }, [authenticated]);
 
-  useEffectAsync(async () => {
-      const response = await fetch('/axelor-api/ws/selection/ens.transportation.status.select', {
-        method: 'POST',
-        redirect: 'follow',
-        headers: { 
-          'Content-Type': 'application/json',
-           Authorization: `Basic ${token?.TOKEN }`,
-           // 'X-CSRF-TOKEN': token?.['CSRF-TOKEN']
-          },
-        body: JSON.stringify({ translate: true }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-      } else {
-        throw Error(await response.text());
-      }
-  }, [token]);
+  // useEffectAsync(async () => {
+  //     const response = await fetch('/axelor-api/ws/selection/ens.transportation.status.select', {
+  //       method: 'POST',
+  //       redirect: 'follow',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //          Authorization: `Basic ${token?.TOKEN }`,
+  //          // 'X-CSRF-TOKEN': token?.['CSRF-TOKEN']
+  //         },
+  //       body: JSON.stringify({ translate: true }),
+  //     });
+  //
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       console.log(data);
+  //     } else {
+  //       throw Error(await response.text());
+  //     }
+  // }, [token]);
 
   return null;
 };
