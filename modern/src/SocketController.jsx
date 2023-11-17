@@ -25,6 +25,7 @@ const SocketController = () => {
 
   const authenticated = useSelector((state) => !!state.session.user);
   const axelorAuthenticated = useSelector((state) => !!state.session.axelor);
+  const axelorTest = useSelector((state) => state.session.axelor);
   const devices = useSelector((state) => state.devices.items);
 
   const socketRef = useRef();
@@ -39,7 +40,11 @@ const SocketController = () => {
 
   const fetchPositions = async () => {
     const positionsResponse = await fetch('/api/positions');
-    const mobilePostionGroupResponse = await getMobileGroupPostitions();
+    let mobilePostionGroupResponse = null;
+    try {
+      mobilePostionGroupResponse = await getMobileGroupPostitions();
+    }
+    catch (e) {}
     if (Array.isArray(mobilePostionGroupResponse?.data?.data)) {
       dispatch(
         mobileGroupsActions.updatePositions(
@@ -151,7 +156,7 @@ const SocketController = () => {
   }, [events, soundEvents, soundAlarms]);
 
   useEffectAsync(async () => {
-    console.log(axelorAuthenticated, 'log useEffectAsync');
+    console.log(axelorTest, 'log useEffectAsync');
     if (!axelorAuthenticated) return;
     const positionsStatus = await fetchPositions();
     const devicesStatus = await fetchDevices();
