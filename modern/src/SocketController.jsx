@@ -24,6 +24,7 @@ const SocketController = () => {
   const [getTransportations] = useTransportationsMutation();
 
   const authenticated = useSelector((state) => !!state.session.user);
+  const axelorAuthenticated = useSelector((state) => !!state.session.axelor);
   const devices = useSelector((state) => state.devices.items);
 
   const socketRef = useRef();
@@ -76,7 +77,7 @@ const SocketController = () => {
 
     socket.onclose = async (event) => {
       dispatch(sessionActions.updateSocket(false));
-      if (event.code !== logoutCode) {
+      if (event.code !== logoutCode && axelorAuthenticated) {
         try {
           const devicesStatus = await fetchDevices();
           const positionsStatus = await fetchPositions();
@@ -149,13 +150,14 @@ const SocketController = () => {
   }, [events, soundEvents, soundAlarms]);
 
   useEffectAsync(async () => {
+    if (!axelorAuthenticated) return;
     const positionsStatus = await fetchPositions();
     const devicesStatus = await fetchDevices();
 
     if (positionsStatus === 401 || devicesStatus === 401) {
       navigate('/login');
     }
-  }, []);
+  }, [axelorAuthenticated]);
 
   return (
     <>

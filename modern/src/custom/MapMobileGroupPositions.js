@@ -24,12 +24,12 @@ const MapMobileGroupPositions = ({ positions, onClick, onClusterClick, showStatu
 
   const createFeature = (devices, position) => {
     return {
-      id: position?.id,
+      id: position?.groupNumber,
       deviceId: position?.deviceId,
-      name: position['mobileGroup.groupNumber'] || 'Unknown Mobile Group',
+      name: position['groupNumber'] || 'Unknown Mobile Group',
       fixTime: formatTime(position.fixTime, 'seconds', hours12),
       category: mapIconKey('car'),
-      color: showStatus ? getMobileGroupStatusColor(position['mobileGroup.groupStatus']) : 'neutral',
+      color: showStatus ? getMobileGroupStatusColor(position['groupStatus']) : 'neutral',
       rotation: position?.course,
       direction: false,
     };
@@ -48,7 +48,7 @@ const MapMobileGroupPositions = ({ positions, onClick, onClusterClick, showStatu
     event.preventDefault();
     const feature = event.features[0];
     if (onClick) {
-      onClick(feature.properties.id, feature.properties.deviceId);
+      onClick(feature.properties?.id, feature.properties.deviceId);
     }
   }, [onClick]);
 
