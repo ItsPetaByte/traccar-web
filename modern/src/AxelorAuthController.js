@@ -31,25 +31,22 @@ const AxelorAuthController = () => {
     }
   }, [authenticated]);
 
-  // useEffectAsync(async () => {
-  //     const response = await fetch('/axelor-api/ws/selection/ens.transportation.status.select', {
-  //       method: 'POST',
-  //       redirect: 'follow',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //          Authorization: `Basic ${token?.TOKEN }`,
-  //          // 'X-CSRF-TOKEN': token?.['CSRF-TOKEN']
-  //         },
-  //       body: JSON.stringify({ translate: true }),
-  //     });
-  //
-  //     if (response.ok) {
-  //       const data = await response.json();
-  //       console.log(data);
-  //     } else {
-  //       throw Error(await response.text());
-  //     }
-  // }, [token]);
+  useEffectAsync(async () => {
+    if (!authenticated) return;
+      const response = await fetch(`${import.meta.env.APP_AXE_DOMAIN}/login.jsp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(user),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(response);
+        console.log(data, "data");
+      } else {
+        throw Error(await response.text());
+      }
+  }, [authenticated]);
 
   return null;
 };

@@ -27,7 +27,6 @@ class AxelorFetchService {
       'Content-Type': 'application/json',
       Authorization: `Basic YWRtaW46QWRtaW4yMDIz`,
       Cookie: 'CSRF-TOKEN=16083f3d46014563a01d2723ed2c6568; JSESSIONID=F61BB02FA4A2F95E3A637824F58BFBCB',
-
       // 'X-CSRF-Token': CSRF_TOKEN,
     };
   }

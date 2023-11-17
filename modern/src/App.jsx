@@ -22,8 +22,6 @@ const useStyles = makeStyles(() => ({
 }));
 
 const App = () => {
-  console.log(`[+] APP VERSION ${import.meta.env.APP_VERSION}`);
-
   const classes = useStyles();
   const theme = useTheme();
   const dispatch = useDispatch();
