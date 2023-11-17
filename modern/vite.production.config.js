@@ -19,7 +19,7 @@ export default defineConfig(() => ({
     },
   },
   define: {
-    'import.meta.env.APP_AXE_DOMAIN': JSON.stringify(`https://${process.env.APP_AXE_DOMAIN}`),
+    'import.meta.env.APP_AXE_DOMAIN': JSON.stringify(`http://${process.env.APP_AXE_DOMAIN}`),
   },
   build: {
     outDir: '../../modern',
