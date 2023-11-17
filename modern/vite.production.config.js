@@ -12,14 +12,14 @@ export default defineConfig(() => ({
       '/api/socket': `ws://${process.env.APP_DOMAIN}:8082`,
       '/api': `https://${process.env.APP_DOMAIN}`,
       '/axelor-api': {
-        target: `http://${process.env.APP_AXE_DOMAIN}`,
+        target: `https://${process.env.APP_AXE_DOMAIN}`,
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/axelor-api/, ''),
       },
     },
   },
   define: {
-    'import.meta.env.APP_AXE_DOMAIN': JSON.stringify(`https://${process.env.APP_AXE_DOMAIN}`),
+    'import.meta.env.APP_AXE_DOMAIN': JSON.stringify(`http://${process.env.APP_AXE_DOMAIN}`),
   },
   build: {
     outDir: '../../modern',

@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { http } from "./AxelorFetchService";
 
 const transportationApi = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: 'axelor-api' }),
+  baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.APP_AXE_DOMAIN }),
   reducerPath: "transportation",
   endpoints: (builder) => ({
     transportations: builder.mutation({
