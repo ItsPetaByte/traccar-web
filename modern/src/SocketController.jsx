@@ -77,6 +77,7 @@ const SocketController = () => {
 
     socket.onclose = async (event) => {
       dispatch(sessionActions.updateSocket(false));
+      console.log(axelorAuthenticated, 'log');
       if (event.code !== logoutCode && axelorAuthenticated) {
         try {
           const devicesStatus = await fetchDevices();
@@ -150,6 +151,7 @@ const SocketController = () => {
   }, [events, soundEvents, soundAlarms]);
 
   useEffectAsync(async () => {
+    console.log(axelorAuthenticated, 'log useEffectAsync');
     if (!axelorAuthenticated) return;
     const positionsStatus = await fetchPositions();
     const devicesStatus = await fetchDevices();
