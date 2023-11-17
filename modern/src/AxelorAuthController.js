@@ -33,8 +33,10 @@ const AxelorAuthController = () => {
 
   useEffectAsync(async () => {
     if (!authenticated) return;
-      const response = await fetch(`${import.meta.env.APP_AXE_DOMAIN}/login.jsp`, {
+      const response = await fetch(`${import.meta.env.APP_AXE_DOMAIN}login.jsp`, {
         method: 'POST',
+        redirect: 'follow',
+        changeOrigin: true,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(user),
       });
