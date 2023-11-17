@@ -126,7 +126,7 @@ const StatusCard = ({ deviceId, position, onClose }) => {
 
   const deviceAttributes = useDeviceAttributes(t);
   const deviceItems =
-    'transportationNumber,transportationStatus,seals.numberEns,informationSeal.statusEns,informationSeal.alarm,seals.positionsId.batteryLevel,seals.idFromTraccar,informationSeal.dateTimeActivation,informationSeal.dateTimeDeactivation,declaration.customsDeparture.name,declaration.customsDestination.name,phoneNumberDriver,declaration.transportationVehicle.plateNo';
+    'transportationNumber,transportationStatus,seals.numberEns,informationSeal.statusEns,informationSeal.alarm,seals.positionsId.batteryLevel,informationSeal.dateTimeActivation,informationSeal.dateTimeDeactivation,declaration.customsDeparture.name,declaration.customsDestination.name,phoneNumberDriver,declaration.transportationVehicle.plateNo';
 
   const navigate = useNavigate();
 
@@ -210,17 +210,22 @@ const StatusCard = ({ deviceId, position, onClose }) => {
                 <ReplayIcon />
               </IconButton>
 
-              { device.tripId && (
-                  <IconButton
-                    onClick={() => {
-                      window.open(`https://${import.meta.env.APP_AXE_DOMAIN}/#/ds/ens.transportation-trip.action-view/edit/${device.tripId}`);
-                      onClose();
-                    }}
-                  >
-                    <LaunchIcon />
-                  </IconButton>
-                )
-              }
+              {device.tripId && (
+                <IconButton
+                  onClick={() => {
+                    window.open(
+                      `https://${
+                        import.meta.env.APP_AXE_DOMAIN
+                      }/#/ds/ens.transportation-trip.action-view/edit/${
+                        device.tripId
+                      }`
+                    );
+                    onClose();
+                  }}
+                >
+                  <LaunchIcon />
+                </IconButton>
+              )}
             </CardActions>
           </Card>
         </Draggable>
