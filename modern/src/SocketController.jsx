@@ -151,7 +151,6 @@ const SocketController = () => {
   }, [events, soundEvents, soundAlarms]);
 
   useEffectAsync(async () => {
-    console.log(axelorTest, 'log useEffectAsync');
     if (!axelorAuthenticated) return;
     const positionsStatus = await fetchPositions();
     const devicesStatus = await fetchDevices();
