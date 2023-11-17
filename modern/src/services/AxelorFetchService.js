@@ -14,6 +14,10 @@ class AxelorFetchService {
     return fetch(this.baseURL + url, _options);
   }
 
+  get headers() {
+    return this.options?.headers ?? {}
+  }
+
   initAuthHeaders(args) {
     const { TOKEN, 'CSRF-TOKEN': CSRF_TOKEN } = args;
     this.headers = { Authorization: `Basic ${TOKEN}`, 'X-CSRF-TOKEN': CSRF_TOKEN };
