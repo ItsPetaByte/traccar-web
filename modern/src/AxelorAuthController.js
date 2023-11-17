@@ -21,9 +21,6 @@ const AxelorAuthController = () => {
 
       if (response.ok) {
         const data = await response.json();
-
-        http.initAuthHeaders({ ...data, TOKEN: btoa(`${user.username}:${user.password}`) });
-
         dispatch(sessionActions.updateAxelor(data));
       } else {
         throw Error(await response.text());
@@ -43,7 +40,9 @@ const AxelorAuthController = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(response);
+        const {headers} = response;
+        // http.initAuthHeaders({ ...data, TOKEN: btoa(`${user.username}:${user.password}`) });
+        console.log(headers, 'headers');
         console.log(data, "data");
       } else {
         throw Error(await response.text());
