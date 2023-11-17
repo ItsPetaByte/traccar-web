@@ -21,9 +21,6 @@ const AxelorAuthController = () => {
 
       if (response.ok) {
         const data = await response.json();
-
-        http.initAuthHeaders({ ...data, TOKEN: btoa(`${user.username}:${user.password}`) });
-
         dispatch(sessionActions.updateAxelor(data));
       } else {
         throw Error(await response.text());
@@ -31,25 +28,25 @@ const AxelorAuthController = () => {
     }
   }, [authenticated]);
 
-  // useEffectAsync(async () => {
-  //     const response = await fetch('/axelor-api/ws/selection/ens.transportation.status.select', {
-  //       method: 'POST',
-  //       redirect: 'follow',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //          Authorization: `Basic ${token?.TOKEN }`,
-  //          // 'X-CSRF-TOKEN': token?.['CSRF-TOKEN']
-  //         },
-  //       body: JSON.stringify({ translate: true }),
-  //     });
-  //
-  //     if (response.ok) {
-  //       const data = await response.json();
-  //       console.log(data);
-  //     } else {
-  //       throw Error(await response.text());
-  //     }
-  // }, [token]);
+  useEffectAsync(async () => {
+    if (!authenticated) return;
+      const response = await fetch(`${import.meta.env.APP_AXE_DOMAIN}login.jsp`, {
+        method: 'POST',
+        redirect: 'follow',
+        headers: {
+          'Content-Type': 'application/json;',
+        },
+        body: JSON.stringify(user),
+      });
+
+      if (response.ok) {
+        const {headers} = response;
+        // http.initAuthHeaders({});
+        console.log(headers);
+      } else {
+        throw Error(await response.text());
+      }
+  }, [authenticated]);
 
   return null;
 };
