@@ -33,7 +33,6 @@ const AxelorAuthController = () => {
       const response = await fetch(`${import.meta.env.APP_AXE_DOMAIN}login.jsp`, {
         method: 'POST',
         redirect: 'follow',
-        changeOrigin: true,
         headers: { 'Content-Type': 'application/json; charset=utf-8' },
         body: JSON.stringify(user),
       });
