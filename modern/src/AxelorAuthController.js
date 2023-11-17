@@ -32,13 +32,15 @@ const AxelorAuthController = () => {
     if (!authenticated) return;
       const response = await fetch(`${import.meta.env.APP_AXE_DOMAIN}login.jsp`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json;' },
+        headers: {
+          'Content-Type': 'application/json;',
+          Authorization: `${btoa('admin:Admin2023')}}`
+        },
         body: JSON.stringify(user),
       });
 
       if (response.ok) {
         const {headers} = response;
-        // http.initAuthHeaders({ ...data, TOKEN: btoa(`${user.username}:${user.password}`) });
         console.log(headers, 'headers');
         console.log(response, "data");
       } else {
