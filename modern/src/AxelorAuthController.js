@@ -32,6 +32,7 @@ const AxelorAuthController = () => {
     if (!authenticated) return;
       const response = await fetch(`${import.meta.env.APP_AXE_DOMAIN}login.jsp`, {
         method: 'POST',
+        redirect: 'follow'
         headers: {
           'Content-Type': 'application/json;',
         },
@@ -40,7 +41,8 @@ const AxelorAuthController = () => {
 
       if (response.ok) {
         const {headers} = response;
-        http.initAuthHeaders({});
+        // http.initAuthHeaders({});
+        console.log(headers);
       } else {
         throw Error(await response.text());
       }
