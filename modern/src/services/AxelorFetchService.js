@@ -20,13 +20,12 @@ class AxelorFetchService {
 
   initAuthHeaders(args) {
 
-    // this.setCookie('JSESSIONID', JSESSIONID, 1, '/', import.meta.env.APP_AXE_DOMAIN);
-
     const { TOKEN, 'CSRF-TOKEN': CSRF_TOKEN, JSESSIONID } = args;
 
     this.headers = {
       Authorization: `Basic ${TOKEN}`,
-      'Content-Type': 'text/plain;json'
+      Cookie: `JSESSIONID=${JSESSIONID}`,
+      'Content-Type': 'application/json',
       // 'X-CSRF-Token': CSRF_TOKEN,
     };
   }
