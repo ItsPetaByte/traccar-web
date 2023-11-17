@@ -21,31 +21,12 @@ const AxelorAuthController = () => {
 
       if (response.ok) {
         const data = await response.json();
+        http.initAuthHeaders({ ...data, TOKEN: btoa(`${user.username}:${user.password}`) });
         dispatch(sessionActions.updateAxelor(data));
       } else {
         throw Error(await response.text());
       }
     }
-  }, [authenticated]);
-
-  useEffectAsync(async () => {
-    if (!authenticated) return;
-      const response = await fetch(`${import.meta.env.APP_AXE_DOMAIN}login.jsp`, {
-        method: 'POST',
-        redirect: 'follow',
-        headers: {
-          'Content-Type': 'application/json;',
-        },
-        body: JSON.stringify(user),
-      });
-
-      if (response.ok) {
-        const {headers} = response;
-        // http.initAuthHeaders({});
-        console.log(headers);
-      } else {
-        throw Error(await response.text());
-      }
   }, [authenticated]);
 
   return null;
