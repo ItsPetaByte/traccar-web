@@ -44,6 +44,7 @@ const MainPage = () => {
   );
 
   const positions = useSelector((state) => state.session.positions);
+  const devices = useSelector((state) => state.devices.items);
   const [filteredPositions, setFilteredPositions] = useState([]);
   const selectedPosition = filteredPositions.find(
     (position) => selectedDeviceId && position.deviceId === selectedDeviceId
@@ -71,6 +72,10 @@ const MainPage = () => {
       setDevicesOpen(false);
     }
   }, [desktop, mapOnSelect, selectedDeviceId]);
+
+  useEffect(() => {
+    console.log(positions, 'positions');
+  }, [positions]);
 
   useFilter(
     keyword,

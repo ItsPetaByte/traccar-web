@@ -1,13 +1,26 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Autocomplete, Toolbar, IconButton, Tooltip, Collapse, Divider, TextField, Box } from '@mui/material';
+import {
+  Autocomplete,
+  Toolbar,
+  IconButton,
+  Tooltip,
+  Collapse,
+  Divider,
+  TextField,
+  Box,
+} from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { useLocalization, useTranslation } from '../common/components/LocalizationProvider';
+import {
+  useLocalization,
+  useTranslation,
+} from '../common/components/LocalizationProvider';
 import { sessionActions } from '../store';
 import { nativePostMessage } from '../common/components/NativeInterface';
+import FilterBar from './FilterBar';
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -46,11 +59,10 @@ const MainToolbar = ({ filter, setFilter, filterMap, setFilterMap }) => {
   const classes = useStyles();
 
   const user = useSelector((state) => state.session.user);
-  const deviceStatuses = useSelector((state) => state.dictionaries.deviceStatuses);
-  const mobileGroupStatuses = useSelector((state) => state.dictionaries.mobileGroupStatuses);
   const groups = useSelector((state) => state.groups.items);
   const devices = useSelector((state) => state.devices.items);
-  const deviceStatusCount = (status) => Object.values(devices).filter((d) => d.status === status).length;
+  const deviceStatusCount = (status) =>
+    Object.values(devices).filter((d) => d.status === status).length;
 
   const toolbarRef = useRef();
 
@@ -59,9 +71,18 @@ const MainToolbar = ({ filter, setFilter, filterMap, setFilterMap }) => {
 
   useEffect(() => {
     setDeviceStatusOptions([
-      { id: 'online', label: `${t('deviceStatusOnline')} (${deviceStatusCount('online')})` },
-      { id: 'offline', label: `${t('deviceStatusOffline')} (${deviceStatusCount('offline')})` },
-      { id: 'unknown', label: `${t('deviceStatusUnknown')} (${deviceStatusCount('unknown')})` },
+      {
+        id: 'online',
+        label: `${t('deviceStatusOnline')} (${deviceStatusCount('online')})`,
+      },
+      {
+        id: 'offline',
+        label: `${t('deviceStatusOffline')} (${deviceStatusCount('offline')})`,
+      },
+      {
+        id: 'unknown',
+        label: `${t('deviceStatusUnknown')} (${deviceStatusCount('unknown')})`,
+      },
     ]);
   }, [devices]);
 
@@ -83,7 +104,9 @@ const MainToolbar = ({ filter, setFilter, filterMap, setFilterMap }) => {
           attributes: {
             ...user.attributes,
             notificationTokens:
-              tokens.length > 1 ? tokens.filter((it) => it !== notificationToken).join(',') : undefined,
+              tokens.length > 1
+                ? tokens.filter((it) => it !== notificationToken).join(',')
+                : undefined,
           },
         };
         await fetch(`/api/users/${user.id}`, {
@@ -103,12 +126,16 @@ const MainToolbar = ({ filter, setFilter, filterMap, setFilterMap }) => {
   return (
     <Toolbar ref={toolbarRef} className={classes.toolbar}>
       <Box className={classes.toolbarRow}>
-        <IconButton color="inherit" edge="start" onClick={() => setFilterOpen(!filterOpen)}>
+        <IconButton
+          color='inherit'
+          edge='start'
+          onClick={() => setFilterOpen(!filterOpen)}
+        >
           <FilterAltIcon />
         </IconButton>
 
         <Tooltip arrow title={t('loginLogout')}>
-          <IconButton color="inherit" edge="end" onClick={handleLogout}>
+          <IconButton color='inherit' edge='end' onClick={handleLogout}>
             <LogoutIcon />
           </IconButton>
         </Tooltip>
@@ -117,18 +144,26 @@ const MainToolbar = ({ filter, setFilter, filterMap, setFilterMap }) => {
       <Collapse in={filterOpen} sx={{ width: '100%' }}>
         <Divider />
         <Box className={classes.toolbarRow}>
-          <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} gap={1}>
+          <Box
+            display='flex'
+            flexDirection={{ xs: 'column', md: 'row' }}
+            gap={1}
+          >
             <Autocomplete
               multiple
               className={classes.input}
               options={deviceStatusOptions}
-              value={deviceStatusOptions.filter((f) => filter.statuses.some((s) => s === f.id))}
+              value={deviceStatusOptions.filter((f) =>
+                filter.statuses.some((s) => s === f.id)
+              )}
               onChange={(event, value) => {
                 const ids = value.map((item) => item?.id || item);
                 handleFilter('statuses', ids);
               }}
               // eslint-disable-next-line react/jsx-props-no-spreading
-              renderInput={(params) => <TextField {...params} label={t('deviceStatus')} />}
+              renderInput={(params) => (
+                <TextField {...params} label={t('deviceStatus')} />
+              )}
             />
             <Autocomplete
               multiple
@@ -139,8 +174,12 @@ const MainToolbar = ({ filter, setFilter, filterMap, setFilterMap }) => {
                 handleFilter('groups', value);
               }}
               // eslint-disable-next-line react/jsx-props-no-spreading
-              renderInput={(params) => <TextField {...params} label={t('settingsGroups')} />}
+              renderInput={(params) => (
+                <TextField {...params} label={t('settingsGroups')} />
+              )}
             />
+
+            {/* <FilterBar onChange={(values) => console.log(values)} /> */}
           </Box>
         </Box>
       </Collapse>
