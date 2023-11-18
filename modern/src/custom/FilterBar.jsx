@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Autocomplete, TextField, Box } from '@mui/material';
+import { Autocomplete, TextField, Box, Typography, Chip } from '@mui/material';
 import {
   useLocalization,
   useTranslation,
@@ -10,7 +10,8 @@ import { debounce } from '@mui/material/utils';
 
 const useStyles = makeStyles((theme) => ({
   input: {
-    minWidth: '300px',
+    flexBasis: '300px',
+    flexGrow: 1,
     '& .MuiFormLabel-root': {
       top: '8%',
     },
@@ -29,10 +30,12 @@ const FilterBar = ({ onChange }) => {
   const t = useTranslation();
   const { language } = useLocalization();
   const [filter, setFilter] = useState({
-    deviceStatus: [],
+    'informationSeal.statusEns': [],
     transportationStatus: [],
     transportationNumber: '',
     'declaration.transportationVehicle.plateNo': '',
+    'seals.numberEns': '',
+    'declaration.registrationNumberTd': '',
   });
 
   const deviceStatuses = useSelector(
@@ -57,25 +60,33 @@ const FilterBar = ({ onChange }) => {
 
   const autocompleteList = [
     {
-      name: 'Статус поездки',
+      name: 'axelorTransportationStatus',
       filterField: 'transportationStatus',
       options: transportationStatuses,
     },
     {
-      name: 'Статус пломбы',
-      filterField: 'deviceStatus',
+      name: 'axelorStatusEns',
+      filterField: 'informationSeal.statusEns',
       options: deviceStatuses,
     },
   ];
 
   const inputList = [
     {
-      name: 'Номер поездки',
+      name: 'axelorTransportationNumber',
       filterField: 'transportationNumber',
     },
     {
-      name: 'Гос.номер АТС ',
+      name: 'axelorDeclarationTransportationVehiclePlateNo',
       filterField: 'declaration.transportationVehicle.plateNo',
+    },
+    {
+      name: 'axelorNumberEns',
+      filterField: 'seals.numberEns',
+    },
+    {
+      name: 'axelorRegistrationNumber',
+      filterField: 'declaration.registrationNumberTd',
     },
   ];
 
@@ -85,7 +96,7 @@ const FilterBar = ({ onChange }) => {
   );
 
   return (
-    <Box display='flex' flexWrap='wrap' gap={1}>
+    <>
       {autocompleteList.map(({ name, options, filterField }, index) => (
         <Autocomplete
           key={index}
@@ -93,22 +104,40 @@ const FilterBar = ({ onChange }) => {
           className={classes.input}
           options={options}
           getOptionLabel={(option) => getTranslatedTitle(option, language)}
+          renderTags={(value, getTagProps) => {
+            const numTags = value.length;
+            const limitTags = 1;
+            return (
+              <>
+                {value.slice(0, limitTags).map((option, index) => (
+                  <Chip
+                    {...getTagProps({ index })}
+                    key={index}
+                    label={getTranslatedTitle(option, language)}
+                  />
+                ))}
+
+                {numTags > limitTags &&
+                  ` +${numTags - limitTags} ${t('axelorMore')}`}
+              </>
+            );
+          }}
           value={filter[filterField]}
           onChange={(_, value) => handleFilter(filterField, value)}
           // eslint-disable-next-line react/jsx-props-no-spreading
-          renderInput={(params) => <TextField {...params} label={name} />}
+          renderInput={(params) => <TextField {...params} label={t(name)} />}
         />
       ))}
 
       {inputList.map(({ name, filterField }, index) => (
         <TextField
           key={index}
-          label={name}
+          label={t(name)}
           className={classes.input}
           onChange={(e) => handleFilterDebounce(filterField, e.target.value)}
         />
       ))}
-    </Box>
+    </>
   );
 };
 

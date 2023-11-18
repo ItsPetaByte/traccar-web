@@ -10,6 +10,7 @@ import {
   Divider,
   TextField,
   Box,
+  Chip,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
@@ -21,6 +22,7 @@ import {
 import { sessionActions } from '../store';
 import { nativePostMessage } from '../common/components/NativeInterface';
 import FilterBar from './FilterBar';
+import { useTransportationsMutation } from '../services/transportation';
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -40,7 +42,8 @@ const useStyles = makeStyles((theme) => ({
     color: '#fff',
   },
   input: {
-    minWidth: '300px',
+    flexBasis: '300px',
+    flexGrow: 1,
     '& .MuiFormLabel-root': {
       top: '8%',
     },
@@ -53,6 +56,7 @@ const useStyles = makeStyles((theme) => ({
 const MainToolbar = ({ filter, setFilter, filterMap, setFilterMap }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [getTransportations] = useTransportationsMutation();
 
   const t = useTranslation();
   const { language } = useLocalization();
@@ -144,15 +148,28 @@ const MainToolbar = ({ filter, setFilter, filterMap, setFilterMap }) => {
       <Collapse in={filterOpen} sx={{ width: '100%' }}>
         <Divider />
         <Box className={classes.toolbarRow}>
-          <Box
-            display='flex'
-            flexDirection={{ xs: 'column', md: 'row' }}
-            gap={1}
-          >
+          <Box display='flex' flexWrap='wrap' margin='auto' gap={1}>
             <Autocomplete
               multiple
               className={classes.input}
               options={deviceStatusOptions}
+              renderTags={(value, getTagProps) => {
+                const numTags = value.length;
+                const limitTags = 1;
+                return (
+                  <>
+                    {value.slice(0, limitTags).map((option, index) => (
+                      <Chip
+                        {...getTagProps({ index })}
+                        key={index}
+                        label={option.label}
+                      />
+                    ))}
+
+                    {numTags > limitTags && ` +${numTags - limitTags}`}
+                  </>
+                );
+              }}
               value={deviceStatusOptions.filter((f) =>
                 filter.statuses.some((s) => s === f.id)
               )}
@@ -165,7 +182,7 @@ const MainToolbar = ({ filter, setFilter, filterMap, setFilterMap }) => {
                 <TextField {...params} label={t('deviceStatus')} />
               )}
             />
-            <Autocomplete
+            {/* <Autocomplete
               multiple
               className={classes.input}
               options={Object.values(groups)}
@@ -177,9 +194,9 @@ const MainToolbar = ({ filter, setFilter, filterMap, setFilterMap }) => {
               renderInput={(params) => (
                 <TextField {...params} label={t('settingsGroups')} />
               )}
-            />
+            /> */}
 
-            {/* <FilterBar onChange={(values) => console.log(values)} /> */}
+            <FilterBar onChange={(values) => getTransportations(values)} />
           </Box>
         </Box>
       </Collapse>

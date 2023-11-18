@@ -20,23 +20,25 @@ const transportationFields = [
   "declaration.transportationVehicle.plateNo"             //гос. номер АТС
 ]
 
+const transportationsOperators = {
+  "informationSeal.statusEns": "in",
+  transportationStatus: "in",
+  transportationNumber: "like",
+  'declaration.transportationVehicle.plateNo': 'like',
+  'seals.numberEns': 'like',
+  'declaration.registrationNumberTd': 'like',
+};
 
-const handleTransportationsValues = (values) => {
-  const transportationsOperators = {
-    deviceStatus: "in",
-    transportationStatus: "in",
-    transportationNumber: "like",
-    'declaration.transportationVehicle.plateNo': 'like',
-  };
 
+const handleCriteries = (values, operators) => {
   let criteries = [];
   Object.entries(values).forEach(([key, value]) => {
     const criteriaValue = Array.isArray(value) ? value.map((item) => item?.value ?? "") : value;
-    if (criteriaValue !== null) {
+    if (criteriaValue != null && criteriaValue.length > 0) {
       criteries.push({
         fieldName: key,
-        operator: transportationsOperators[key],
-        value: criteriaValue,
+        operator: operators[key],
+        value: operators[key] === "like" ?  `%${criteriaValue}%`: criteriaValue,
       });
     }
   });
@@ -58,7 +60,7 @@ const transportationApi = createApi({
             fields: transportationFields,
             data: {
               operator: 'and',
-              criteria: handleTransportationsValues(values)
+              criteria: handleCriteries(values, transportationsOperators)
             }
         }),
       }),
