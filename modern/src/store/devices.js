@@ -5,6 +5,7 @@ const { reducer, actions } = createSlice({
   name: 'devices',
   initialState: {
     items: {},
+    serverItems: {},
     selectedId: null,
     selectedIds: [],
   },
@@ -15,6 +16,7 @@ const { reducer, actions } = createSlice({
     },
     update(state, action) {
       action.payload.forEach((item) => state.items[item.id] = item);
+      state.serverItems = state.items;
     },
     select(state, action) {
       state.selectedId = action.payload;
@@ -33,14 +35,19 @@ const { reducer, actions } = createSlice({
   },
   extraReducers: (builder) => {
     builder.addMatcher(transportationApi.endpoints.transportations.matchFulfilled, (state, action) => {
-      action.payload?.data.forEach((item) => {
-        const id = item?.['seals.idFromTraccar'];
-        const originItem = state.items[id];
-        const mergedItem = {...item, ...originItem, tripId: item.id};
-        if(id && state.items.hasOwnProperty(id)) {
-          state.items[String(id)] = mergedItem
-        }
-      });
+      const payload = action.payload;
+      if(payload.total < 1) {
+        state.items = {};
+      } else {
+        payload.data.map((item) => {
+          const id = item?.['seals.idFromTraccar'];
+          const originItem = state.serverItems[id];
+          const mergedItem = {...item, ...originItem, tripId: item.id};
+          if(id && state.serverItems.hasOwnProperty(id)) {
+            state.items[id] = mergedItem;
+          };
+        });
+      }
     })
   }
 });

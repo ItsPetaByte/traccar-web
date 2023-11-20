@@ -58,7 +58,7 @@ const SocketController = () => {
     const devicesResponse = await fetch('/api/devices');
     if (devicesResponse.ok) {
       dispatch(devicesActions.update(await devicesResponse.json()));
-      await getTransportations();
+      await getTransportations({});
     }
 
     return devicesResponse.status;

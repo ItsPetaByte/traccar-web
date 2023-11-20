@@ -602,5 +602,7 @@
   "axelorCustomsDeparture": "Customs authority of departure",
   "axelorCustomsDestination": "Customs authority of destination",
   "axelorPhoneNumberDriver": "Driver's phone number",
-  "axelorDeclarationTransportationVehiclePlateNo": "Declaration Vehicle license plate number"
+  "axelorDeclarationTransportationVehiclePlateNo": "Declaration Vehicle license plate number",
+  "axelorRegistrationNumber": "Registration number",
+  "axelorMore": "More"
 }

@@ -595,5 +595,7 @@
   "axelorCustomsDeparture": "Жөнөтүүчү бажы органы",
   "axelorCustomsDestination": "Бажы органы",
   "axelorPhoneNumberDriver": "Айдоочунун телефон номери",
-  "axelorDeclarationTransportationVehiclePlateNo": "АТС гос. номери"
+  "axelorDeclarationTransportationVehiclePlateNo": "АТС гос. номери",
+  "axelorRegistrationNumber": "Каттоо номери",
+  "axelorMore": "Дагы"
 }

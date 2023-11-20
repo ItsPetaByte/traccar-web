@@ -1,13 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Autocomplete, Toolbar, IconButton, Tooltip, Collapse, Divider, TextField, Box } from '@mui/material';
+import {
+  Toolbar,
+  IconButton,
+  Tooltip,
+  Collapse,
+  Divider,
+  Box,
+} from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { useLocalization, useTranslation } from '../common/components/LocalizationProvider';
-import { sessionActions } from '../store';
+import { useTranslation } from '../common/components/LocalizationProvider';
+import { devicesActions, sessionActions } from '../store';
 import { nativePostMessage } from '../common/components/NativeInterface';
+import FilterBar from './FilterBar';
+import { useTransportationsMutation } from '../services/transportation';
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -27,7 +36,8 @@ const useStyles = makeStyles((theme) => ({
     color: '#fff',
   },
   input: {
-    minWidth: '300px',
+    flexBasis: '300px',
+    flexGrow: 1,
     '& .MuiFormLabel-root': {
       top: '8%',
     },
@@ -37,40 +47,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MainToolbar = ({ filter, setFilter, filterMap, setFilterMap }) => {
+const MainToolbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [getTransportations] = useTransportationsMutation();
 
   const t = useTranslation();
-  const { language } = useLocalization();
   const classes = useStyles();
 
   const user = useSelector((state) => state.session.user);
-  const deviceStatuses = useSelector((state) => state.dictionaries.deviceStatuses);
-  const mobileGroupStatuses = useSelector((state) => state.dictionaries.mobileGroupStatuses);
-  const groups = useSelector((state) => state.groups.items);
-  const devices = useSelector((state) => state.devices.items);
-  const deviceStatusCount = (status) => Object.values(devices).filter((d) => d.status === status).length;
 
   const toolbarRef = useRef();
 
   const [filterOpen, setFilterOpen] = useState(false);
-  const [deviceStatusOptions, setDeviceStatusOptions] = useState([]);
-
-  useEffect(() => {
-    setDeviceStatusOptions([
-      { id: 'online', label: `${t('deviceStatusOnline')} (${deviceStatusCount('online')})` },
-      { id: 'offline', label: `${t('deviceStatusOffline')} (${deviceStatusCount('offline')})` },
-      { id: 'unknown', label: `${t('deviceStatusUnknown')} (${deviceStatusCount('unknown')})` },
-    ]);
-  }, [devices]);
-
-  const handleFilter = (field, value) => {
-    if (filterMap === false) {
-      setFilterMap(true);
-    }
-    setFilter({ ...filter, [field]: value });
-  };
 
   const handleLogout = async () => {
     const notificationToken = window.localStorage.getItem('notificationToken');
@@ -83,7 +72,9 @@ const MainToolbar = ({ filter, setFilter, filterMap, setFilterMap }) => {
           attributes: {
             ...user.attributes,
             notificationTokens:
-              tokens.length > 1 ? tokens.filter((it) => it !== notificationToken).join(',') : undefined,
+              tokens.length > 1
+                ? tokens.filter((it) => it !== notificationToken).join(',')
+                : undefined,
           },
         };
         await fetch(`/api/users/${user.id}`, {
@@ -100,15 +91,35 @@ const MainToolbar = ({ filter, setFilter, filterMap, setFilterMap }) => {
     dispatch(sessionActions.updateUser(null));
   };
 
+  const handleFilterBar = async (values) => {
+    const isFiltered = Object.values(values).some(
+      ([value]) => !!value || value?.length < 1
+    );
+
+    if (isFiltered) {
+      getTransportations(values);
+    } else {
+      const devicesResponse = await fetch('/api/devices');
+      if (devicesResponse.ok) {
+        dispatch(devicesActions.update(await devicesResponse.json()));
+        await getTransportations({});
+      }
+    }
+  };
+
   return (
     <Toolbar ref={toolbarRef} className={classes.toolbar}>
       <Box className={classes.toolbarRow}>
-        <IconButton color="inherit" edge="start" onClick={() => setFilterOpen(!filterOpen)}>
+        <IconButton
+          color='inherit'
+          edge='start'
+          onClick={() => setFilterOpen(!filterOpen)}
+        >
           <FilterAltIcon />
         </IconButton>
 
         <Tooltip arrow title={t('loginLogout')}>
-          <IconButton color="inherit" edge="end" onClick={handleLogout}>
+          <IconButton color='inherit' edge='end' onClick={handleLogout}>
             <LogoutIcon />
           </IconButton>
         </Tooltip>
@@ -117,30 +128,8 @@ const MainToolbar = ({ filter, setFilter, filterMap, setFilterMap }) => {
       <Collapse in={filterOpen} sx={{ width: '100%' }}>
         <Divider />
         <Box className={classes.toolbarRow}>
-          <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} gap={1}>
-            <Autocomplete
-              multiple
-              className={classes.input}
-              options={deviceStatusOptions}
-              value={deviceStatusOptions.filter((f) => filter.statuses.some((s) => s === f.id))}
-              onChange={(event, value) => {
-                const ids = value.map((item) => item?.id || item);
-                handleFilter('statuses', ids);
-              }}
-              // eslint-disable-next-line react/jsx-props-no-spreading
-              renderInput={(params) => <TextField {...params} label={t('deviceStatus')} />}
-            />
-            <Autocomplete
-              multiple
-              className={classes.input}
-              options={Object.values(groups)}
-              value={filter.groups}
-              onChange={(event, value) => {
-                handleFilter('groups', value);
-              }}
-              // eslint-disable-next-line react/jsx-props-no-spreading
-              renderInput={(params) => <TextField {...params} label={t('settingsGroups')} />}
-            />
+          <Box display='flex' flexWrap='wrap' margin='auto' gap={1}>
+            <FilterBar onChange={handleFilterBar} />
           </Box>
         </Box>
       </Collapse>
