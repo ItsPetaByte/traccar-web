@@ -149,53 +149,6 @@ const MainToolbar = ({ filter, setFilter, filterMap, setFilterMap }) => {
         <Divider />
         <Box className={classes.toolbarRow}>
           <Box display='flex' flexWrap='wrap' margin='auto' gap={1}>
-            <Autocomplete
-              multiple
-              className={classes.input}
-              options={deviceStatusOptions}
-              renderTags={(value, getTagProps) => {
-                const numTags = value.length;
-                const limitTags = 1;
-                return (
-                  <>
-                    {value.slice(0, limitTags).map((option, index) => (
-                      <Chip
-                        {...getTagProps({ index })}
-                        key={index}
-                        label={option.label}
-                      />
-                    ))}
-
-                    {numTags > limitTags && ` +${numTags - limitTags}`}
-                  </>
-                );
-              }}
-              value={deviceStatusOptions.filter((f) =>
-                filter.statuses.some((s) => s === f.id)
-              )}
-              onChange={(event, value) => {
-                const ids = value.map((item) => item?.id || item);
-                handleFilter('statuses', ids);
-              }}
-              // eslint-disable-next-line react/jsx-props-no-spreading
-              renderInput={(params) => (
-                <TextField {...params} label={t('deviceStatus')} />
-              )}
-            />
-            {/* <Autocomplete
-              multiple
-              className={classes.input}
-              options={Object.values(groups)}
-              value={filter.groups}
-              onChange={(event, value) => {
-                handleFilter('groups', value);
-              }}
-              // eslint-disable-next-line react/jsx-props-no-spreading
-              renderInput={(params) => (
-                <TextField {...params} label={t('settingsGroups')} />
-              )}
-            /> */}
-
             <FilterBar onChange={(values) => getTransportations(values)} />
           </Box>
         </Box>

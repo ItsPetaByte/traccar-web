@@ -73,10 +73,6 @@ const MainPage = () => {
     }
   }, [desktop, mapOnSelect, selectedDeviceId]);
 
-  useEffect(() => {
-    console.log(positions, 'positions');
-  }, [positions]);
-
   useFilter(
     keyword,
     filter,
