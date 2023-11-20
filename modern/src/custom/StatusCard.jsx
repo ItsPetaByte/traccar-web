@@ -108,12 +108,11 @@ const StatusRow = ({ name, content }) => {
   );
 };
 
-const StatusCard = ({ deviceId, position, onClose }) => {
+const StatusCard = ({ device, onClose }) => {
   const classes = useStyles();
   const t = useTranslation();
   const { language } = useLocalization();
 
-  const device = useSelector((state) => state.devices.items[deviceId]);
   const transportationStatuses = useSelector(
     (state) => state.dictionaries.transportationStatuses
   );
