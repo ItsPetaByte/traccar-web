@@ -28,7 +28,7 @@ import useDeviceAttributes from '../common/attributes/useDeviceAttributes';
 const getStatus = (arr, value, locale) => {
   const finded = arr.find((item) => item?.value == value);
   if (finded == null) return '';
-  return finded?.[`title_${locale}`] ?? finded?.title ?? '';
+  return (finded?.[`title_${locale}`] || finded?.title) ?? '';
 };
 
 const useStyles = makeStyles((theme) => ({

@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const getTranslatedTitle = (option, locale) => {
-  return option?.[`title_${locale}`] ?? option?.title ?? '';
+  return (option?.[`title_${locale}`] || option?.title) ?? '';
 };
 
 const FilterBar = ({ onChange }) => {

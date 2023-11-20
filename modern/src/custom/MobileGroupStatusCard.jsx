@@ -119,7 +119,7 @@ const MobileGroupStatusCard = ({ position, onClose, desktopPadding = 0 }) => {
   const rows = [
     {
       name: t('axelorMobileGroupStatus'),
-      content: groupStatus?.[`title_${language}`] ?? groupStatus?.title ?? '',
+      content: (groupStatus?.[`title_${language}`] || groupStatus?.title) ?? '',
     },
     {
       name: t('axelorMobileGroupNumber'),
