@@ -28,7 +28,7 @@ import useDeviceAttributes from '../common/attributes/useDeviceAttributes';
 const getStatus = (arr, value, locale) => {
   const finded = arr.find((item) => item?.value == value);
   if (finded == null) return '';
-  return finded?.[`title_${locale}`] ?? finded?.title ?? '';
+  return (finded?.[`title_${locale}`] || finded?.title) ?? '';
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -214,7 +214,7 @@ const StatusCard = ({ deviceId, position, onClose }) => {
                 <IconButton
                   onClick={() => {
                     window.open(
-                      `https://${
+                      `${
                         import.meta.env.APP_AXE_DOMAIN
                       }/#/ds/ens.transportation-trip.action-view/edit/${
                         device.tripId
