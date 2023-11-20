@@ -1,25 +1,19 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
-  Autocomplete,
   Toolbar,
   IconButton,
   Tooltip,
   Collapse,
   Divider,
-  TextField,
   Box,
-  Chip,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import LogoutIcon from '@mui/icons-material/Logout';
-import {
-  useLocalization,
-  useTranslation,
-} from '../common/components/LocalizationProvider';
-import { sessionActions } from '../store';
+import { useTranslation } from '../common/components/LocalizationProvider';
+import { devicesActions, sessionActions } from '../store';
 import { nativePostMessage } from '../common/components/NativeInterface';
 import FilterBar from './FilterBar';
 import { useTransportationsMutation } from '../services/transportation';
@@ -53,49 +47,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MainToolbar = ({ filter, setFilter, filterMap, setFilterMap }) => {
+const MainToolbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [getTransportations] = useTransportationsMutation();
 
   const t = useTranslation();
-  const { language } = useLocalization();
   const classes = useStyles();
 
   const user = useSelector((state) => state.session.user);
-  const groups = useSelector((state) => state.groups.items);
-  const devices = useSelector((state) => state.devices.items);
-  const deviceStatusCount = (status) =>
-    Object.values(devices).filter((d) => d.status === status).length;
 
   const toolbarRef = useRef();
 
   const [filterOpen, setFilterOpen] = useState(false);
-  const [deviceStatusOptions, setDeviceStatusOptions] = useState([]);
-
-  useEffect(() => {
-    setDeviceStatusOptions([
-      {
-        id: 'online',
-        label: `${t('deviceStatusOnline')} (${deviceStatusCount('online')})`,
-      },
-      {
-        id: 'offline',
-        label: `${t('deviceStatusOffline')} (${deviceStatusCount('offline')})`,
-      },
-      {
-        id: 'unknown',
-        label: `${t('deviceStatusUnknown')} (${deviceStatusCount('unknown')})`,
-      },
-    ]);
-  }, [devices]);
-
-  const handleFilter = (field, value) => {
-    if (filterMap === false) {
-      setFilterMap(true);
-    }
-    setFilter({ ...filter, [field]: value });
-  };
 
   const handleLogout = async () => {
     const notificationToken = window.localStorage.getItem('notificationToken');
@@ -127,6 +91,22 @@ const MainToolbar = ({ filter, setFilter, filterMap, setFilterMap }) => {
     dispatch(sessionActions.updateUser(null));
   };
 
+  const handleFilterBar = async (values) => {
+    const isFiltered = Object.values(values).some(
+      ([value]) => !!value || value?.length < 1
+    );
+
+    if (isFiltered) {
+      getTransportations(values);
+    } else {
+      const devicesResponse = await fetch('/api/devices');
+      if (devicesResponse.ok) {
+        dispatch(devicesActions.update(await devicesResponse.json()));
+        await getTransportations({});
+      }
+    }
+  };
+
   return (
     <Toolbar ref={toolbarRef} className={classes.toolbar}>
       <Box className={classes.toolbarRow}>
@@ -149,7 +129,7 @@ const MainToolbar = ({ filter, setFilter, filterMap, setFilterMap }) => {
         <Divider />
         <Box className={classes.toolbarRow}>
           <Box display='flex' flexWrap='wrap' margin='auto' gap={1}>
-            <FilterBar onChange={(values) => getTransportations(values)} />
+            <FilterBar onChange={handleFilterBar} />
           </Box>
         </Box>
       </Collapse>

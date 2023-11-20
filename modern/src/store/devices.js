@@ -39,16 +39,14 @@ const { reducer, actions } = createSlice({
       if(payload.total < 1) {
         state.items = {};
       } else {
-        const items = {};
         payload.data.map((item) => {
           const id = item?.['seals.idFromTraccar'];
           const originItem = state.serverItems[id];
           const mergedItem = {...item, ...originItem, tripId: item.id};
           if(id && state.serverItems.hasOwnProperty(id)) {
-            items[id] = mergedItem;
+            state.items[id] = mergedItem;
           };
         });
-        state.items = items;
       }
     })
   }
