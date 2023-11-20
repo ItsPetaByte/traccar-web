@@ -1,5 +1,5 @@
 import React from 'react';
-import { Paper } from '@mui/material';
+import { Alert, Paper, Snackbar } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import StatusCard from './StatusCard';
@@ -8,6 +8,7 @@ import { devicesActions } from '../store';
 import MainMap from './MainMap';
 import MainToolbar from './MainToolbar';
 import { mobileGroupsActions } from '../store/mobile-groups';
+import { useTranslation } from '../common/components/LocalizationProvider';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -25,6 +26,7 @@ const useStyles = makeStyles(() => ({
 const MainPage = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const t = useTranslation();
 
   const mobileGroupsPositions = useSelector(
     (state) => state.mobileGroups.positions
@@ -38,10 +40,13 @@ const MainPage = () => {
   const selectedPosition = filteredPositions.find(
     (position) => selectedDeviceId && position.deviceId === selectedDeviceId
   );
+
   const selectedMobileGroupPosition = mobileGroupsPositions.find(
     (position) =>
       selectedMobileGroupId && position.groupNumber === selectedMobileGroupId
   );
+
+  const device = useSelector((state) => state.devices.items[selectedDeviceId]);
 
   return (
     <div className={classes.root}>
@@ -55,10 +60,9 @@ const MainPage = () => {
         <MainToolbar />
       </Paper>
 
-      {selectedDeviceId && (
+      {selectedDeviceId && device?.tripId && (
         <StatusCard
-          deviceId={selectedDeviceId}
-          position={selectedPosition}
+          device={device}
           onClose={() => dispatch(devicesActions.selectId(null))}
         />
       )}
@@ -69,6 +73,18 @@ const MainPage = () => {
           onClose={() => dispatch(mobileGroupsActions.selectId(null))}
         />
       )}
+
+      <Snackbar
+        open={!!(selectedDeviceId && !device?.tripId)}
+        autoHideDuration={2000}
+        onClose={() => {
+          dispatch(devicesActions.selectId(null));
+        }}
+      >
+        <Alert elevation={6} severity='warning' variant='filled'>
+          {t('sharedNoData')}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
