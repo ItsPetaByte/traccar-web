@@ -28,7 +28,7 @@ import useDeviceAttributes from '../common/attributes/useDeviceAttributes';
 const getStatus = (arr, value, locale) => {
   const finded = arr.find((item) => item?.value == value);
   if (finded == null) return '';
-  return finded?.[`title_${locale}`] ?? finded?.title ?? '';
+  return (finded?.[`title_${locale}`] || finded?.title) ?? '';
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -108,12 +108,11 @@ const StatusRow = ({ name, content }) => {
   );
 };
 
-const StatusCard = ({ deviceId, position, onClose }) => {
+const StatusCard = ({ device, onClose }) => {
   const classes = useStyles();
   const t = useTranslation();
   const { language } = useLocalization();
 
-  const device = useSelector((state) => state.devices.items[deviceId]);
   const transportationStatuses = useSelector(
     (state) => state.dictionaries.transportationStatuses
   );
