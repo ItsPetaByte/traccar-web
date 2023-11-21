@@ -107,15 +107,6 @@ const StatusRow = ({ name, content }) => {
 const StatusCard = ({ device, onClose }) => {
   const classes = useStyles();
   const t = useTranslation();
-  const { language } = useLocalization();
-
-  // const transportationStatuses = useSelector(
-  //   (state) => state.dictionaries.transportationStatuses,
-  // );
-  //
-  // const deviceStatuses = useSelector(
-  //   (state) => state.dictionaries.deviceStatuses,
-  // );
 
   const deviceImage = device?.attributes?.deviceImage;
 
@@ -125,7 +116,7 @@ const StatusCard = ({ device, onClose }) => {
       + 'informationSeal.statusEns,informationSeal.alarm,'
       + 'seals.positionsId.batteryLevel,informationSeal.dateTimeActivation,'
       + 'informationSeal.dateTimeDeactivation,'
-      + 'customsDeparture,customsDestination,'
+      + 'declaration.customsDeparture.name,declaration.customsDestination.name,'
       + 'phoneNumberDriver,declaration.transportationVehicle.plateNo';
 
   const navigate = useNavigate();

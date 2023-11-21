@@ -64,14 +64,8 @@ const { reducer, actions } = createSlice({
             ...item,
             ...originItem,
             tripId: item.id,
-            customsDestination: item?.['declaration.customsDestination'].name,
-            customsDeparture: item?.['declaration.customsDeparture'].name,
           };
           if (id && state.serverItems.hasOwnProperty(id)) {
-
-            delete mergedItem['declaration.customsDestination'];
-            delete mergedItem['declaration.customsDeparture'];
-
             state.serverItems[id] = mergedItem;
             return state.serverItems[id];
           }

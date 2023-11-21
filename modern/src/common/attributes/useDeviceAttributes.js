@@ -66,11 +66,11 @@ export default (t) => useMemo(() => ({
     name: t('axelorDateTimeDeactivation'),
     type: 'string'
   },
-  customsDeparture: {
+  'declaration.customsDeparture.name': {
     name: t('axelorCustomsDeparture'),
     type: 'string'
   },
-  customsDestination: {
+  'declaration.customsDestination.name': {
     name: t('axelorCustomsDestination'),
     type: 'string'
   },  
