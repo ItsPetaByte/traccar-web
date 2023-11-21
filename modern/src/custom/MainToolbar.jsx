@@ -1,3 +1,4 @@
+import SettingsIcon from '@mui/icons-material/Settings';
 import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -111,22 +112,36 @@ const MainToolbar = () => {
 
   return (
     <Toolbar ref={toolbarRef} className={classes.toolbar}>
-      <Box className={classes.toolbarRow}>
-        <IconButton
-          color='inherit'
-          edge='start'
-          onClick={() => setFilterOpen(!filterOpen)}
-        >
-          <Badge badgeContent={badgeCount} color='success'>
-            <FilterAltIcon />
-          </Badge>
-        </IconButton>
 
-        <Tooltip arrow title={t('loginLogout')}>
-          <IconButton color='inherit' edge='end' onClick={handleLogout}>
-            <LogoutIcon />
+        <Box className={classes.toolbarRow}>
+          <IconButton
+              color='inherit'
+              edge='start'
+              onClick={() => setFilterOpen(!filterOpen)}
+          >
+            <Badge badgeContent={badgeCount} color='success'>
+              <FilterAltIcon />
+            </Badge>
           </IconButton>
-        </Tooltip>
+
+          <Box>
+
+            <IconButton
+                color='inherit'
+                edge='start'
+                onClick={() => navigate('/settings/preferences')}
+            >
+              <Badge badgeContent={badgeCount} color='success'>
+                <SettingsIcon />
+              </Badge>
+            </IconButton>
+
+          <Tooltip arrow title={t('loginLogout')}>
+            <IconButton color='inherit' edge='end' onClick={handleLogout}>
+              <LogoutIcon />
+            </IconButton>
+          </Tooltip>
+        </Box>
       </Box>
 
       <Collapse in={filterOpen} sx={{ width: '100%' }}>
