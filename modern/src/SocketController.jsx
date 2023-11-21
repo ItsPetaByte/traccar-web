@@ -56,9 +56,23 @@ const SocketController = () => {
 
   const fetchDevices = async () => {
     const devicesResponse = await fetch('/api/devices');
+    const persistedState = localStorage.getItem('filter');
+    const filterState = persistedState ? JSON.parse(persistedState) : null;
     if (devicesResponse.ok) {
       dispatch(devicesActions.update(await devicesResponse.json()));
-      await getTransportations({});
+      dispatch(devicesActions.mergeByAxelor(await getTransportations({})));
+      let count = 0;
+      Object.values(filterState ?? {}).map(([value]) => {
+        if (!!value || value?.length < 1) {
+          count++;
+        }
+      });
+
+      dispatch(
+        devicesActions.updateByAxelor(
+          count > 0 ? await getTransportations(filterState) : null
+        )
+      );
     }
 
     return devicesResponse.status;
