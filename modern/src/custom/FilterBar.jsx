@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Autocomplete, TextField, Box, Typography, Chip } from '@mui/material';
 import {
@@ -7,6 +7,7 @@ import {
 } from '../common/components/LocalizationProvider';
 import { makeStyles } from '@mui/styles';
 import { debounce } from '@mui/material/utils';
+import usePersistedState from '../common/util/usePersistedState';
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -25,11 +26,11 @@ const getTranslatedTitle = (option, locale) => {
   return (option?.[`title_${locale}`] || option?.title) ?? '';
 };
 
-const FilterBar = ({ onChange }) => {
+const FilterBar = ({ onChange, onBadgeCountChange }) => {
   const classes = useStyles();
   const t = useTranslation();
   const { language } = useLocalization();
-  const [filter, setFilter] = useState({
+  const [filter, setFilter] = usePersistedState('filter', {
     'informationSeal.statusEns': [],
     transportationStatus: [],
     transportationNumber: '',
@@ -46,14 +47,24 @@ const FilterBar = ({ onChange }) => {
     (state) => state.dictionaries.transportationStatuses
   );
 
-  const handleFilter = (key, value) => {
+  const handleFilterDebounce = useCallback(
+    debounce((updatedValue) => onChange(updatedValue), 500),
+    []
+  );
+
+  const handleFilter = (key, value, debounce = false) => {
     setFilter((prev) => {
       const updatedValue = {
         ...prev,
         [key]: value,
       };
 
-      if (onChange) onChange(updatedValue);
+      if (debounce && onChange) {
+        handleFilterDebounce(updatedValue);
+      }
+      if (!debounce && onChange) {
+        onChange(updatedValue);
+      }
       return updatedValue;
     });
   };
@@ -90,10 +101,17 @@ const FilterBar = ({ onChange }) => {
     },
   ];
 
-  const handleFilterDebounce = useCallback(
-    debounce((field, value) => handleFilter(field, value), 500),
-    []
-  );
+  useEffect(() => {
+    if (onBadgeCountChange) {
+      let count = 0;
+      Object.values(filter).map(([value]) => {
+        if (!!value || value?.length < 1) {
+          count++;
+        }
+      });
+      onBadgeCountChange(count);
+    }
+  }, [onBadgeCountChange, filter]);
 
   return (
     <>
@@ -132,9 +150,10 @@ const FilterBar = ({ onChange }) => {
       {inputList.map(({ name, filterField }, index) => (
         <TextField
           key={index}
+          value={filter[filterField]}
           label={t(name)}
           className={classes.input}
-          onChange={(e) => handleFilterDebounce(filterField, e.target.value)}
+          onChange={(e) => handleFilter(filterField, e.target.value, true)}
         />
       ))}
     </>

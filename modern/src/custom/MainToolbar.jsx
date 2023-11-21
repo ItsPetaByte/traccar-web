@@ -8,6 +8,7 @@ import {
   Collapse,
   Divider,
   Box,
+  Badge,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
@@ -60,6 +61,7 @@ const MainToolbar = () => {
   const toolbarRef = useRef();
 
   const [filterOpen, setFilterOpen] = useState(false);
+  const [badgeCount, setBadgeCount] = useState(0);
 
   const handleLogout = async () => {
     const notificationToken = window.localStorage.getItem('notificationToken');
@@ -97,13 +99,13 @@ const MainToolbar = () => {
     );
 
     if (isFiltered) {
-      getTransportations(values);
+      dispatch(
+        devicesActions.updateByAxelor(
+          await getTransportations(isFiltered ? values : {})
+        )
+      );
     } else {
-      const devicesResponse = await fetch('/api/devices');
-      if (devicesResponse.ok) {
-        dispatch(devicesActions.update(await devicesResponse.json()));
-        await getTransportations({});
-      }
+      dispatch(devicesActions.resetByAxelor());
     }
   };
 
@@ -115,7 +117,9 @@ const MainToolbar = () => {
           edge='start'
           onClick={() => setFilterOpen(!filterOpen)}
         >
-          <FilterAltIcon />
+          <Badge badgeContent={badgeCount} color='success'>
+            <FilterAltIcon />
+          </Badge>
         </IconButton>
 
         <Tooltip arrow title={t('loginLogout')}>
@@ -129,7 +133,10 @@ const MainToolbar = () => {
         <Divider />
         <Box className={classes.toolbarRow}>
           <Box display='flex' flexWrap='wrap' margin='auto' gap={1}>
-            <FilterBar onChange={handleFilterBar} />
+            <FilterBar
+              onChange={handleFilterBar}
+              onBadgeCountChange={setBadgeCount}
+            />
           </Box>
         </Box>
       </Collapse>
