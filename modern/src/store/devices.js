@@ -33,19 +33,19 @@ const { reducer, actions } = createSlice({
     },
     updateByAxelor(state, action) {
       const data = action.payload?.data;
-      if(data == null) {
+      if (data == null) {
         state.items = state.serverItems;
-        return
+        return;
       }
-      if(data?.total < 1) {
+      if (data?.total < 1) {
         state.items = {};
       } else {
-        let items = {};
+        const items = {};
         data?.data.map((item) => {
           const id = item?.['seals.idFromTraccar'];
           const originItem = state.serverItems[id];
-          const mergedItem = {...item, ...originItem, tripId: item.id};
-          if(id && state.serverItems.hasOwnProperty(id)) {
+          const mergedItem = { ...item, ...originItem, tripId: item.id };
+          if (id && state.serverItems.hasOwnProperty(id)) {
             items[id] = mergedItem;
           }
         });
@@ -54,23 +54,35 @@ const { reducer, actions } = createSlice({
     },
     mergeByAxelor(state, action) {
       const data = action.payload?.data;
-      if(data.total < 1) {
+      if (data.total < 1) {
         state.items = {};
       } else {
         data.data.map((item) => {
           const id = item?.['seals.idFromTraccar'];
           const originItem = state.serverItems[id];
-          const mergedItem = {...item, ...originItem, tripId: item.id};
-          if(id && state.serverItems.hasOwnProperty(id)) {
+          const mergedItem = {
+            ...item,
+            ...originItem,
+            tripId: item.id,
+            customsDestination: item?.['declaration.customsDestination'].name,
+            customsDeparture: item?.['declaration.customsDeparture'].name,
+          };
+          if (id && state.serverItems.hasOwnProperty(id)) {
+
+            delete mergedItem['declaration.customsDestination'];
+            delete mergedItem['declaration.customsDeparture'];
+
             state.serverItems[id] = mergedItem;
+            return state.serverItems[id];
           }
+          return null;
         });
       }
     },
     resetByAxelor(state, action) {
       state.items = state.serverItems;
-    }
-  }
+    },
+  },
 });
 
 export { actions as devicesActions };
