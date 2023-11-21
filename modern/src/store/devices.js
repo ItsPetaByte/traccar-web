@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import transportationApi from '../services/transportation';
 
 const { reducer, actions } = createSlice({
   name: 'devices',
@@ -32,23 +31,45 @@ const { reducer, actions } = createSlice({
     remove(state, action) {
       delete state.items[action.payload];
     },
-  },
-  extraReducers: (builder) => {
-    builder.addMatcher(transportationApi.endpoints.transportations.matchFulfilled, (state, action) => {
-      const payload = action.payload;
-      if(payload.total < 1) {
+    updateByAxelor(state, action) {
+      const data = action.payload?.data;
+      if(data == null) {
+        state.items = state.serverItems;
+        return
+      }
+      if(data?.total < 1) {
         state.items = {};
       } else {
-        payload.data.map((item) => {
+        let items = {};
+        data?.data.map((item) => {
           const id = item?.['seals.idFromTraccar'];
           const originItem = state.serverItems[id];
           const mergedItem = {...item, ...originItem, tripId: item.id};
           if(id && state.serverItems.hasOwnProperty(id)) {
-            state.items[id] = mergedItem;
-          };
+            items[id] = mergedItem;
+          }
+        });
+        state.items = items;
+      }
+    },
+    mergeByAxelor(state, action) {
+      const data = action.payload?.data;
+      if(data.total < 1) {
+        state.items = {};
+      } else {
+        data.data.map((item) => {
+          const id = item?.['seals.idFromTraccar'];
+          const originItem = state.serverItems[id];
+          const mergedItem = {...item, ...originItem, tripId: item.id};
+          if(id && state.serverItems.hasOwnProperty(id)) {
+            state.serverItems[id] = mergedItem;
+          }
         });
       }
-    })
+    },
+    resetByAxelor(state, action) {
+      state.items = state.serverItems;
+    }
   }
 });
 
