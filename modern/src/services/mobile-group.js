@@ -3,7 +3,7 @@ import { http } from "./AxelorFetchService";
 
 
 const mobileGroupApi = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: "axelor-api" }),
+  baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.APP_AXE_DOMAIN }),
   reducerPath: "mobile-group",
   endpoints: (builder) => ({
     mobileGroupPositions: builder.mutation({

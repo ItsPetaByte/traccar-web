@@ -213,9 +213,9 @@ const StatusCard = ({ device, onClose }) => {
                 <IconButton
                   onClick={() => {
                     window.open(
-                      `https://${
+                      `${
                         import.meta.env.APP_AXE_DOMAIN
-                      }/#/ds/ens.transportation-trip.action-view/edit/${
+                      }#/ds/ens.transportation-trip.action-view/edit/${
                         device.tripId
                       }`
                     );
