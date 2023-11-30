@@ -4,6 +4,7 @@ import React, {
   useRef, useLayoutEffect, useEffect, useState,
 } from 'react';
 import { SwitcherControl } from '../map/switcher/switcher';
+import { FullscreenControl } from '../map/fullscreen/fullscreen';
 import { useAttributePreference, usePreference } from '../common/util/preferences';
 import usePersistedState, { savePersistedState } from '../common/util/usePersistedState';
 import { mapImages } from '../map/core/preloadImages';
@@ -71,7 +72,9 @@ const switcher = new SwitcherControl(
   },
 );
 
+
 map.addControl(switcher, 'bottom-right');
+map.addControl(new FullscreenControl(), 'bottom-right');
 
 const MapView = ({ children }) => {
   const containerEl = useRef(null);
@@ -83,6 +86,13 @@ const MapView = ({ children }) => {
   const [defaultMapStyle] = usePersistedState('selectedMapStyle', usePreference('map', 'locationIqStreets'));
   const mapboxAccessToken = useAttributePreference('mapboxAccessToken');
   const maxZoom = useAttributePreference('web.maxZoom');
+
+  // useEffect(() => {
+  //   const fullscreenControl = new maplibregl.FullscreenControl({});
+  //   map.addControl(fullscreenControl, 'bottom-right');
+  //   return () => map.removeControl(fullscreenControl);
+  // }, []);
+
 
   useEffect(() => {
     if (maxZoom) {

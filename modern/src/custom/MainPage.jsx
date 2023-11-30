@@ -42,8 +42,7 @@ const MainPage = () => {
   );
 
   const selectedMobileGroupPosition = mobileGroupsPositions.find(
-    (position) =>
-      selectedMobileGroupId && position.groupNumber === selectedMobileGroupId
+    (position) => selectedMobileGroupId && position.groupNumber === selectedMobileGroupId
   );
 
   const device = useSelector((state) => state.devices.items[selectedDeviceId]);
