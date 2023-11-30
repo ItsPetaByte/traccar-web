@@ -1,4 +1,3 @@
-import './fullscreen.css';
 
 export class FullscreenControl {
 
