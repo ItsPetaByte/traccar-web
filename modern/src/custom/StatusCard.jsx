@@ -1,3 +1,4 @@
+import PublishIcon from '@mui/icons-material/Publish';
 import ReplayIcon from '@mui/icons-material/Replay';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -206,6 +207,13 @@ const StatusCard = ({ device, onClose }) => {
                 // disabled={disableActions || !position}
               >
                 <ReplayIcon />
+              </IconButton>
+
+              <IconButton
+                  onClick={() => navigate(`/settings/device/${device.id}/command`)}
+                  // disabled={disableActions}
+              >
+                <PublishIcon />
               </IconButton>
 
               {device.tripId && (

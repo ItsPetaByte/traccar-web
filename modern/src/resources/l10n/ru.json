@@ -597,5 +597,8 @@
   "axelorPhoneNumberDriver": "Номер телефон водителя",
   "axelorDeclarationTransportationVehiclePlateNo": "Гос. номер АТС",
   "axelorRegistrationNumber": "Регистрационный номер",
-  "axelorMore": "Ещё"
+  "axelorMore": "Ещё",
+  "axelorEnsPositions": "Расположения ЭНП",
+  "axelorEnsTotalCount": "Общее количество",
+  "axelorApplyFilter": "Применить фильтр"
 }

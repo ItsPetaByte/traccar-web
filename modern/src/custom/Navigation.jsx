@@ -151,7 +151,6 @@ const Navigation = () => {
           <Route path="scheduled" element={<ScheduledPage />} />
           <Route path="statistics" element={<StatisticsPage />} />
         </Route>
-
       </Route>
     </Routes>
   );

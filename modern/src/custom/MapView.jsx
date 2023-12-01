@@ -1,9 +1,13 @@
 import 'maplibre-gl/dist/maplibre-gl.css';
 import maplibregl from 'maplibre-gl';
 import React, {
-  useRef, useLayoutEffect, useEffect, useState,
+  useRef, useLayoutEffect, useEffect, useState
 } from 'react';
+import {useNavigate} from 'react-router-dom';
+import {DatetimeControl} from '../map/datetime/datetime';
 import { SwitcherControl } from '../map/switcher/switcher';
+import { FullscreenControl } from '../map/fullscreen/fullscreen';
+import { SettingsControl } from '../map/settings/settings';
 import { useAttributePreference, usePreference } from '../common/util/preferences';
 import usePersistedState, { savePersistedState } from '../common/util/usePersistedState';
 import { mapImages } from '../map/core/preloadImages';
@@ -52,8 +56,6 @@ const initMap = async () => {
   updateReadyValue(true);
 };
 
-map.addControl(new maplibregl.NavigationControl(), 'bottom-right');
-
 const switcher = new SwitcherControl(
   () => updateReadyValue(false),
   (styleId) => savePersistedState('selectedMapStyle', styleId),
@@ -71,18 +73,33 @@ const switcher = new SwitcherControl(
   },
 );
 
+map.addControl(new FullscreenControl(), 'bottom-right');
+map.addControl(new DatetimeControl(), 'bottom-left');
+map.addControl(new maplibregl.NavigationControl(), 'bottom-right');
 map.addControl(switcher, 'bottom-right');
 
 const MapView = ({ children }) => {
   const containerEl = useRef(null);
-
-  const [mapReady, setMapReady] = useState(false);
-
+  const navigate = useNavigate();
   const mapStyles = useMapStyles();
+  const [mapReady, setMapReady] = useState(false);
   const activeMapStyles = useAttributePreference('activeMapStyles', 'locationIqStreets,osm,carto');
   const [defaultMapStyle] = usePersistedState('selectedMapStyle', usePreference('map', 'locationIqStreets'));
   const mapboxAccessToken = useAttributePreference('mapboxAccessToken');
   const maxZoom = useAttributePreference('web.maxZoom');
+
+  useEffect(() => {
+
+    if (ready) return;
+
+    const settingsControl = new SettingsControl(() => navigate('/settings/preferences'));
+
+    map.addControl(settingsControl, 'bottom-right');
+
+    return () => {
+      map.removeControl(settingsControl);
+    };
+  }, []);
 
   useEffect(() => {
     if (maxZoom) {
