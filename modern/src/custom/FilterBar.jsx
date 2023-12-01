@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import {Autocomplete, TextField, Chip, Button} from '@mui/material';
+import {Autocomplete, Button, Chip, TextField} from '@mui/material';
+import {makeStyles} from '@mui/styles';
+import React, {useEffect} from 'react';
+import {useSelector} from 'react-redux';
 import {useLocalization, useTranslation} from '../common/components/LocalizationProvider';
-import { makeStyles } from '@mui/styles';
-import { debounce } from '@mui/material/utils';
 import usePersistedState from '../common/util/usePersistedState';
 
 const useStyles = makeStyles((theme) => ({
@@ -60,20 +59,18 @@ const FilterBar = ({ onApplyFilter, onBadgeCountChange }) => {
 
   const transportationStatuses = useSelector((state) => state.dictionaries.transportationStatuses);
 
-  const handleFilter = (key, value, debounce = false) => {
+  const handleFilter = (key, value) => {
     setFilter((prev) => {
-      const updatedValue = {
-        ...prev,
-        [key]: value,
-      };
-
       // if (debounce && onChange) {
       //   handleFilterDebounce(updatedValue);
       // }
       // if (!debounce && onChange) {
       //   onChange(updatedValue);
       // }
-      return updatedValue;
+      return {
+        ...prev,
+        [key]: value,
+      };
     });
   };
 
