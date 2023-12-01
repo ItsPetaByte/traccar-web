@@ -14,8 +14,8 @@ const transportationFields = [
   "informationSeal.dateTimeActivation",                   //дата и время активации
   "informationSeal.dateTimeDeactivation",                 //дата и время деактивации
 
-  "declaration.customsDeparture",                         //таможенный орган отправления
-  "declaration.customsDestination",                       //таможенный орган назначения
+  "declaration.customsDeparture.name",                         //таможенный орган отправления
+  "declaration.customsDestination.name",                       //таможенный орган назначения
   "phoneNumberDriver",                                    //номер телефон водителя
   "declaration.transportationVehicle.plateNo"             //гос. номер АТС
 ]

@@ -29,6 +29,11 @@ export const formatVoltage = (value, t) => `${value} ${t('sharedVoltAbbreviation
 
 export const formatConsumption = (value, t) => `${value} ${t('sharedLiterPerHourAbbreviation')}`;
 
+export const formatStatusTitle = (arr, value, locale) => {
+  const finded = arr.find((item) => item?.value === value);
+  if (finded == null) return '';
+  return (finded?.[`title_${locale}`] || finded?.title) ?? '';
+}
 export const formatTime = (value, format, hours12) => {
   if (value) {
     const d = dayjs(value);

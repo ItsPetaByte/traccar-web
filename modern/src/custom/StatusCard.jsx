@@ -25,12 +25,8 @@ import {
   useTranslation,
 } from '../common/components/LocalizationProvider';
 import useDeviceAttributes from '../common/attributes/useDeviceAttributes';
+import PositionValue from '../common/components/PositionValue';
 
-const getStatus = (arr, value, locale) => {
-  const finded = arr.find((item) => item?.value == value);
-  if (finded == null) return '';
-  return (finded?.[`title_${locale}`] || finded?.title) ?? '';
-};
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -98,10 +94,10 @@ const StatusRow = ({ name, content }) => {
   return (
     <TableRow className={classes.row}>
       <TableCell className={classes.cell}>
-        <Typography variant='body2'>{name}</Typography>
+        <Typography variant="body2">{name}</Typography>
       </TableCell>
       <TableCell className={classes.cell}>
-        <Typography variant='body2' color='textSecondary'>
+        <Typography variant="body2" color="textSecondary">
           {content}
         </Typography>
       </TableCell>
@@ -112,40 +108,36 @@ const StatusRow = ({ name, content }) => {
 const StatusCard = ({ device, onClose }) => {
   const classes = useStyles();
   const t = useTranslation();
-  const { language } = useLocalization();
-
-  const transportationStatuses = useSelector(
-    (state) => state.dictionaries.transportationStatuses
-  );
-
-  const deviceStatuses = useSelector(
-    (state) => state.dictionaries.deviceStatuses
-  );
 
   const deviceImage = device?.attributes?.deviceImage;
 
   const deviceAttributes = useDeviceAttributes(t);
-  const deviceItems =
-    'transportationNumber,transportationStatus,seals.numberEns,informationSeal.statusEns,informationSeal.alarm,seals.positionsId.batteryLevel,informationSeal.dateTimeActivation,informationSeal.dateTimeDeactivation,declaration.customsDeparture.name,declaration.customsDestination.name,phoneNumberDriver,declaration.transportationVehicle.plateNo';
+  const deviceItems = 'transportationNumber,'
+      + 'transportationStatus,seals.numberEns,'
+      + 'informationSeal.statusEns,informationSeal.alarm,'
+      + 'seals.positionsId.batteryLevel,informationSeal.dateTimeActivation,'
+      + 'informationSeal.dateTimeDeactivation,'
+      + 'declaration.customsDeparture.name,declaration.customsDestination.name,'
+      + 'phoneNumberDriver,declaration.transportationVehicle.plateNo';
 
   const navigate = useNavigate();
 
-  const getDeviceValue = (device, key) => {
-    const statuses = {
-      'informationSeal.statusEns': getStatus(
-        deviceStatuses,
-        device[key],
-        language
-      ),
-      transportationStatus: getStatus(
-        transportationStatuses,
-        device[key],
-        language
-      ),
-    };
-
-    return statuses.hasOwnProperty(key) ? statuses[key] : device?.[key] ?? '';
-  };
+  // const getDeviceValue = (device, key) => {
+  //   const statuses = {
+  //     'informationSeal.statusEns': getStatus(
+  //       deviceStatuses,
+  //       device[key],
+  //       language,
+  //     ),
+  //     transportationStatus: getStatus(
+  //       transportationStatuses,
+  //       device[key],
+  //       language,
+  //     ),
+  //   };
+  //
+  //   return statuses.hasOwnProperty(key) ? statuses[key] : device?.[key] ?? '';
+  // };
 
   return (
     <div className={classes.root}>
@@ -158,33 +150,33 @@ const StatusCard = ({ device, onClose }) => {
                 image={`/api/media/${device.uniqueId}/${deviceImage}`}
               >
                 <IconButton
-                  size='small'
+                  size="small"
                   onClick={onClose}
                   onTouchStart={onClose}
                 >
-                  <CloseIcon fontSize='small' className={classes.mediaButton} />
+                  <CloseIcon fontSize="small" className={classes.mediaButton} />
                 </IconButton>
               </CardMedia>
             ) : (
               <div className={classes.header}>
-                <Typography variant='body2' color='textSecondary'>
+                <Typography variant="body2" color="textSecondary">
                   {device?.['seals.numberEns'] ?? ''}
                 </Typography>
                 <IconButton
-                  size='small'
+                  size="small"
                   onClick={onClose}
                   onTouchStart={onClose}
                 >
-                  <CloseIcon fontSize='small' />
+                  <CloseIcon fontSize="small" />
                 </IconButton>
               </div>
             )}
 
             <CardContent className={classes.content}>
-              <Table size='small' classes={{ root: classes.table }}>
+              <Table size="small" classes={{ root: classes.table }}>
                 <TableBody>
-                  {device &&
-                    deviceItems
+                  {device
+                    && deviceItems
                       .split(',')
                       .filter((key) => device.hasOwnProperty(key))
                       .map((key) => (
@@ -195,7 +187,14 @@ const StatusCard = ({ device, onClose }) => {
                               ? deviceAttributes[key].name
                               : key
                           }
-                          content={getDeviceValue(device, key)}
+                          // content={getDeviceValue(device, key)}
+                          content={(
+                            <PositionValue
+                              position={device}
+                              property={device.hasOwnProperty(key) ? key : null}
+                              attribute={device.hasOwnProperty(key) ? null : key}
+                            />
+                          )}
                         />
                       ))}
                 </TableBody>
@@ -225,7 +224,7 @@ const StatusCard = ({ device, onClose }) => {
                         import.meta.env.APP_AXE_DOMAIN
                       }#/ds/ens.transportation-trip.action-view/edit/${
                         device.tripId
-                      }`
+                      }`,
                     );
                     onClose();
                   }}

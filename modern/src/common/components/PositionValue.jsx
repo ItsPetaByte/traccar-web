@@ -17,22 +17,24 @@ import {
   formatTemperature,
   formatVoltage,
   formatVolume,
-  formatConsumption,
+  formatConsumption, formatStatusTitle
 } from '../util/formatter';
 import { speedToKnots } from '../util/converter';
 import { useAttributePreference, usePreference } from '../util/preferences';
-import { useTranslation } from './LocalizationProvider';
+import {useLocalization, useTranslation} from './LocalizationProvider';
 import { useAdministrator } from '../util/permissions';
 import AddressValue from './AddressValue';
 import GeofencesValue from './GeofencesValue';
 
 const PositionValue = ({ position, property, attribute }) => {
   const t = useTranslation();
+  const { language } = useLocalization();
 
   const admin = useAdministrator();
 
-  const device = useSelector((state) => state.devices.items[position.deviceId]);
-
+  const device = useSelector((state) => state.devices.items[position['seals.idFromTraccar']]);
+  const deviceStatuses = useSelector((state) => state.dictionaries.deviceStatuses);
+  const transportationStatuses = useSelector((state) => state.dictionaries.transportationStatuses,);
   const key = property || attribute;
   const value = property ? position[property] : position.attributes[attribute];
 
@@ -48,6 +50,10 @@ const PositionValue = ({ position, property, attribute }) => {
       case 'fixTime':
       case 'deviceTime':
       case 'serverTime':
+        return formatTime(value, 'seconds', hours12);
+      case 'informationSeal.dateTimeActivation':
+        return formatTime(value, 'seconds', hours12);
+      case 'informationSeal.dateTimeDeactivation':
         return formatTime(value, 'seconds', hours12);
       case 'latitude':
         return formatCoordinate('latitude', value, coordinateFormat);
@@ -79,6 +85,18 @@ const PositionValue = ({ position, property, attribute }) => {
       case 'tripOdometer':
       case 'obdOdometer':
       case 'distance':
+      case 'transportationStatus':
+        return formatStatusTitle(
+          transportationStatuses,
+          device[key],
+          language,
+        );
+      case 'informationSeal.statusEns':
+        return formatStatusTitle(
+          deviceStatuses,
+          device[key],
+          language,
+        );
       case 'totalDistance':
         return value != null ? formatDistance(value, distanceUnit, t) : '';
       case 'hours':
