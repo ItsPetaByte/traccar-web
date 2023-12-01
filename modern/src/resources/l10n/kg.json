@@ -597,5 +597,8 @@
   "axelorPhoneNumberDriver": "Айдоочунун телефон номери",
   "axelorDeclarationTransportationVehiclePlateNo": "АТС гос. номери",
   "axelorRegistrationNumber": "Каттоо номери",
-  "axelorMore": "Дагы"
+  "axelorMore": "Дагы",
+  "axelorEnsPositions": "ЭНП позициялары",
+  "axelorEnsTotalCount": "Жалпы саны",
+  "axelorApplyFilter": "Фильтрлоо"
 }

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -8,7 +8,7 @@ import {
   Collapse,
   Divider,
   Box,
-  Badge,
+  Badge, Typography
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
@@ -36,6 +36,11 @@ const useStyles = makeStyles((theme) => ({
     padding: `${theme.spacing(1)} 0`,
     color: '#fff',
   },
+  toolbarFilterRow: {
+    alignItems: 'center',
+    width: '100%',
+    padding: `${theme.spacing(1)} 0`,
+  },
   input: {
     flexBasis: '300px',
     flexGrow: 1,
@@ -51,17 +56,18 @@ const useStyles = makeStyles((theme) => ({
 const MainToolbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const toolbarRef = useRef();
+  const classes = useStyles();
   const [getTransportations] = useTransportationsMutation();
 
   const t = useTranslation();
-  const classes = useStyles();
 
   const user = useSelector((state) => state.session.user);
-
-  const toolbarRef = useRef();
+  const devices = useSelector((state) => state.devices);
 
   const [filterOpen, setFilterOpen] = useState(false);
   const [badgeCount, setBadgeCount] = useState(0);
+  const [ensCount, setEnsCount] = useState(0);
 
   const handleLogout = async () => {
     const notificationToken = window.localStorage.getItem('notificationToken');
@@ -99,19 +105,65 @@ const MainToolbar = () => {
     );
 
     if (isFiltered) {
-      dispatch(
-        devicesActions.updateByAxelor(
-          await getTransportations(isFiltered ? values : {})
-        )
-      );
+
+      const data = await getTransportations(isFiltered ? values : {});
+
+      setEnsCount(data?.data?.total ?? 0);
+
+      dispatch(devicesActions.updateByAxelor(data));
+
     } else {
+
       dispatch(devicesActions.resetByAxelor());
     }
+
   };
+
+  const handleFilterBarChanges = (count) => {
+
+    setBadgeCount(count);
+
+    if (count === 0) {
+      if (devices.items) {
+        setEnsCount(Object.values(devices.items).length);
+      }
+    }
+
+  };
+
+
+  useEffect(() => {
+    if (devices.items) {
+      setEnsCount(Object.values(devices.items).length);
+    }
+  }, []);
+
 
   return (
     <Toolbar ref={toolbarRef} className={classes.toolbar}>
+
       <Box className={classes.toolbarRow}>
+
+        <Box
+          display='flex'
+          gap={1}
+          sx={{ flexGrow: 1 }}
+        >
+          <Typography variant="h6">{ t("axelorEnsPositions") }</Typography>
+
+          <Box
+              display='flex'
+              gap={1}
+              alignItems='center'
+          >
+            <Typography variant="p">{
+              `(${t("axelorEnsTotalCount")}: ${ensCount})`
+            }</Typography>
+
+          </Box>
+
+        </Box>
+
         <IconButton
           color='inherit'
           edge='start'
@@ -131,15 +183,16 @@ const MainToolbar = () => {
 
       <Collapse in={filterOpen} sx={{ width: '100%' }}>
         <Divider />
-        <Box className={classes.toolbarRow}>
-          <Box display='flex' flexWrap='wrap' margin='auto' gap={1}>
+        <Box className={classes.toolbarFilterRow}>
+          <Box display='flex' flexWrap='wrap' gap={1}>
             <FilterBar
-              onChange={handleFilterBar}
-              onBadgeCountChange={setBadgeCount}
+              onApplyFilter={handleFilterBar}
+              onBadgeCountChange={handleFilterBarChanges}
             />
           </Box>
         </Box>
       </Collapse>
+
     </Toolbar>
   );
 };

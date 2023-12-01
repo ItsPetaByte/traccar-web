@@ -604,5 +604,8 @@
   "axelorPhoneNumberDriver": "Driver's phone number",
   "axelorDeclarationTransportationVehiclePlateNo": "Declaration Vehicle license plate number",
   "axelorRegistrationNumber": "Registration number",
-  "axelorMore": "More"
+  "axelorMore": "More",
+  "axelorEnsPositions": "Ens positions",
+  "axelorEnsPositionsCount": "Total count",
+  "axelorApplyFilter": "Apply filter"
 }
