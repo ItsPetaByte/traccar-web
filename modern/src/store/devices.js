@@ -41,7 +41,7 @@ const { reducer, actions } = createSlice({
         state.items = {};
       } else {
         const items = {};
-        data?.data.map((item) => {
+        data?.data?.map((item) => {
           const id = item?.['seals.idFromTraccar'];
           const originItem = state.serverItems[id];
           const mergedItem = { ...item, ...originItem, tripId: item.id };

@@ -1,18 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector, connect } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { Snackbar } from '@mui/material';
-import { devicesActions, sessionActions } from './store';
-import { useEffectAsync } from './reactHelper';
-import { useTranslation } from './common/components/LocalizationProvider';
-import { snackBarDurationLongMs } from './common/util/duration';
-import alarm from './resources/alarm.mp3';
-import { eventsActions } from './store/events';
-import useFeatures from './common/util/useFeatures';
-import { useAttributePreference } from './common/util/preferences';
-import { useMobileGroupPositionsMutation } from './services/mobile-group';
-import { mobileGroupsActions } from './store/mobile-groups';
-import { useTransportationsMutation } from './services/transportation';
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector, connect } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { Box, CircularProgress, Snackbar, lighten } from "@mui/material";
+import { devicesActions, sessionActions } from "./store";
+import { useEffectAsync } from "./reactHelper";
+import { useTranslation } from "./common/components/LocalizationProvider";
+import { snackBarDurationLongMs } from "./common/util/duration";
+import alarm from "./resources/alarm.mp3";
+import { eventsActions } from "./store/events";
+import useFeatures from "./common/util/useFeatures";
+import { useAttributePreference } from "./common/util/preferences";
+import { useMobileGroupPositionsMutation } from "./services/mobile-group";
+import { mobileGroupsActions } from "./store/mobile-groups";
+import {
+  transformTransportationResponse,
+  useTransportationsMutation,
+} from "./services/transportation";
 
 const logoutCode = 4000;
 
@@ -22,6 +25,7 @@ const SocketController = () => {
   const t = useTranslation();
   const [getMobileGroupPostitions] = useMobileGroupPositionsMutation();
   const [getTransportations] = useTransportationsMutation();
+  const [loading, setLoading] = useState(false);
 
   const authenticated = useSelector((state) => !!state.session.user);
   const axelorAuthenticated = useSelector((state) => !!state.session.axelor);
@@ -32,13 +36,13 @@ const SocketController = () => {
   const [events, setEvents] = useState([]);
   const [notifications, setNotifications] = useState([]);
 
-  const soundEvents = useAttributePreference('soundEvents', '');
-  const soundAlarms = useAttributePreference('soundAlarms', 'sos');
+  const soundEvents = useAttributePreference("soundEvents", "");
+  const soundAlarms = useAttributePreference("soundAlarms", "sos");
 
   const features = useFeatures();
 
   const fetchPositions = async () => {
-    const positionsResponse = await fetch('/api/positions');
+    const positionsResponse = await fetch("/api/positions");
     const mobilePostionGroupResponse = await getMobileGroupPostitions();
     if (Array.isArray(mobilePostionGroupResponse?.data?.data)) {
       dispatch(
@@ -55,12 +59,16 @@ const SocketController = () => {
   };
 
   const fetchDevices = async () => {
-    const devicesResponse = await fetch('/api/devices');
-    const persistedState = localStorage.getItem('filter');
+    const devicesResponse = await fetch("/api/devices");
+    const persistedState = localStorage.getItem("filter");
     const filterState = persistedState ? JSON.parse(persistedState) : null;
     if (devicesResponse.ok) {
       dispatch(devicesActions.update(await devicesResponse.json()));
-      dispatch(devicesActions.mergeByAxelor(await getTransportations({})));
+      dispatch(
+        devicesActions.mergeByAxelor(
+          transformTransportationResponse(await getTransportations({}))
+        )
+      );
       let count = 0;
       Object.values(filterState ?? {}).map(([value]) => {
         if (!!value || value?.length < 1) {
@@ -70,7 +78,11 @@ const SocketController = () => {
 
       dispatch(
         devicesActions.updateByAxelor(
-          count > 0 ? await getTransportations(filterState) : null
+          count > 0
+            ? transformTransportationResponse(
+                await getTransportations(filterState)
+              )
+            : null
         )
       );
     }
@@ -79,7 +91,7 @@ const SocketController = () => {
   };
 
   const connectSocket = () => {
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
     const socket = new WebSocket(
       `${protocol}//${window.location.host}/api/socket`
     );
@@ -97,7 +109,7 @@ const SocketController = () => {
           const positionsStatus = await fetchPositions();
 
           if (positionsStatus === 401 || devicesStatus === 401) {
-            navigate('/login');
+            navigate("/login");
           }
         } catch (error) {
           // ignore errors
@@ -125,7 +137,7 @@ const SocketController = () => {
 
   useEffectAsync(async () => {
     if (authenticated) {
-      const response = await fetch('/api/devices');
+      const response = await fetch("/api/devices");
       if (response.ok) {
         dispatch(devicesActions.refresh(await response.json()));
       } else {
@@ -156,7 +168,7 @@ const SocketController = () => {
     events.forEach((event) => {
       if (
         soundEvents.includes(event.type) ||
-        (event.type === 'alarm' && soundAlarms.includes(event.attributes.alarm))
+        (event.type === "alarm" && soundAlarms.includes(event.attributes.alarm))
       ) {
         new Audio(alarm).play();
       }
@@ -165,16 +177,34 @@ const SocketController = () => {
 
   useEffectAsync(async () => {
     if (!axelorAuthenticated) return;
+    setLoading(true);
     const positionsStatus = await fetchPositions();
     const devicesStatus = await fetchDevices();
-
+    setLoading(false);
     if (positionsStatus === 401 || devicesStatus === 401) {
-      navigate('/login');
+      navigate("/login");
     }
   }, [axelorAuthenticated]);
 
   return (
     <>
+      {!!loading && (
+        <Box
+          position="fixed"
+          top={0}
+          bottom={0}
+          left={0}
+          right={0}
+          zIndex={1000}
+          bgcolor={"rgba(255,255,255, 0.1)"}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          sx={{ backdropFilter: "blur(2px)" }}
+        >
+          <CircularProgress />
+        </Box>
+      )}
       {notifications.map((notification) => (
         <Snackbar
           key={notification.id}

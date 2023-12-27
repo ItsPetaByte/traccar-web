@@ -1,63 +1,69 @@
-import {Autocomplete, Button, Chip, TextField} from '@mui/material';
-import {makeStyles} from '@mui/styles';
-import React, {useEffect} from 'react';
-import {useSelector} from 'react-redux';
-import {useLocalization, useTranslation} from '../common/components/LocalizationProvider';
-import usePersistedState from '../common/util/usePersistedState';
+import { Autocomplete, Button, Chip, TextField } from "@mui/material";
+import { makeStyles } from "@mui/styles";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import {
+  useLocalization,
+  useTranslation,
+} from "../common/components/LocalizationProvider";
+import usePersistedState from "../common/util/usePersistedState";
 
 const useStyles = makeStyles((theme) => ({
   input: {
-    flexBasis: '200px',
+    flexBasis: "200px",
     flexGrow: 1,
     // '& .MuiFormLabel-root': {
     //   top: '8%',
     // },
-    '& .MuiInputBase-root': {
-      minHeight: '40px',
+    "& .MuiInputBase-root": {
+      minHeight: "40px",
     },
-    '& .MuiChip-root': {
-        backgroundColor: '#0f5696',
-        color: '#fff',
-        margin: '0',
-        height: '25px',
-    }
+    "& .MuiChip-root": {
+      backgroundColor: "#0f5696",
+      color: "#fff",
+      margin: "0",
+      height: "25px",
+    },
   },
   button: {
-    flexBasis: '210px',
+    flexBasis: "210px",
     flexGrow: 1,
-    height: '40px',
-    backgroundColor: '#05410e',
-    color: '#fff',
-    fontSize: '12px',
-    maxWidth: '250px',
-    '&:hover': {
-        backgroundColor: '#0a6e07',
-        color: '#fff',
+    height: "40px",
+    backgroundColor: "#05410e",
+    color: "#fff",
+    fontSize: "12px",
+    maxWidth: "250px",
+    "&:hover": {
+      backgroundColor: "#0a6e07",
+      color: "#fff",
     },
-
-  }
+  },
 }));
 
 const getTranslatedTitle = (option, locale) => {
-  return (option?.[`title_${locale}`] || option?.title) ?? '';
+  return (option?.[`title_${locale}`] || option?.title) ?? "";
 };
 
 const FilterBar = ({ onApplyFilter, onBadgeCountChange }) => {
   const classes = useStyles();
   const t = useTranslation();
   const { language } = useLocalization();
-  const [filter, setFilter] = usePersistedState('filter', {
-    'informationSeal.statusEns': [],
+  const [filter, setFilter] = usePersistedState("filter", {
+    "informationSeal.statusEns": [],
     transportationStatus: [],
-    transportationNumber: '',
-    'declaration.transportationVehicle.plateNo': '',
-    'seals.numberEns': '',
-    'declaration.registrationNumberTd': '',
+    transportationNumber: "",
+    "declaration.transportationVehicle.plateNo": "",
+    "seals.numberEns": "",
+    "declaration.registrationNumberTd": "",
   });
 
-  const deviceStatuses = useSelector((state) => state.dictionaries.deviceStatuses);
+  const deviceStatuses = useSelector(
+    (state) => state.dictionaries.deviceStatuses
+  );
 
-  const transportationStatuses = useSelector((state) => state.dictionaries.transportationStatuses);
+  const transportationStatuses = useSelector(
+    (state) => state.dictionaries.transportationStatuses
+  );
 
   const handleFilter = (key, value) => {
     setFilter((prev) => {
@@ -76,33 +82,33 @@ const FilterBar = ({ onApplyFilter, onBadgeCountChange }) => {
 
   const autocompleteList = [
     {
-      name: 'axelorTransportationStatus',
-      filterField: 'transportationStatus',
+      name: "axelorTransportationStatus",
+      filterField: "transportationStatus",
       options: transportationStatuses,
     },
     {
-      name: 'axelorStatusEns',
-      filterField: 'informationSeal.statusEns',
+      name: "axelorStatusEns",
+      filterField: "informationSeal.statusEns",
       options: deviceStatuses,
     },
   ];
 
   const inputList = [
     {
-      name: 'axelorTransportationNumber',
-      filterField: 'transportationNumber',
+      name: "axelorTransportationNumber",
+      filterField: "transportationNumber",
     },
     {
-      name: 'axelorDeclarationTransportationVehiclePlateNo',
-      filterField: 'declaration.transportationVehicle.plateNo',
+      name: "axelorDeclarationTransportationVehiclePlateNo",
+      filterField: "declaration.transportationVehicle.plateNo",
     },
     {
-      name: 'axelorNumberEns',
-      filterField: 'seals.numberEns',
+      name: "axelorNumberEns",
+      filterField: "seals.numberEns",
     },
     {
-      name: 'axelorRegistrationNumber',
-      filterField: 'declaration.registrationNumberTd',
+      name: "axelorRegistrationNumber",
+      filterField: "declaration.registrationNumberTd",
     },
   ];
 
@@ -141,7 +147,7 @@ const FilterBar = ({ onApplyFilter, onBadgeCountChange }) => {
                 ))}
 
                 {numTags > limitTags &&
-                  ` +${numTags - limitTags} ${t('axelorMore')}`}
+                  ` +${numTags - limitTags} ${t("axelorMore")}`}
               </>
             );
           }}
@@ -162,14 +168,13 @@ const FilterBar = ({ onApplyFilter, onBadgeCountChange }) => {
       ))}
 
       <Button
-          variant="contained"
-          color="primary"
-          className={classes.button}
-          onClick={() => onApplyFilter(filter)}
+        variant="contained"
+        color="primary"
+        className={classes.button}
+        onClick={() => onApplyFilter(filter)}
       >
-          { t("axelorApplyFilter") }
+        {t("axelorApplyFilter")}
       </Button>
-
     </>
   );
 };
