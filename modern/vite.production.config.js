@@ -22,7 +22,7 @@ export default defineConfig(() => ({
     'import.meta.env.APP_AXE_DOMAIN': JSON.stringify(process.env.NODE_ENV === 'development' ? '/axelor-api' : `https://${process.env.APP_AXE_DOMAIN}`),
   },
   build: {
-    outDir: '../../modern',
+    outDir: 'build',
   },
   plugins: [
     svgr(),
