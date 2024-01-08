@@ -4,6 +4,7 @@
 2. npm i
 3. npm run start
 4. Откройте ссылку http://localhost:3000/
+5. npm run buildServer - Для того чтобы собрать сборку (build)
 
 ## .env.dev.local for production (build)
 
