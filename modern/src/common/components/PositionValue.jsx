@@ -1,7 +1,7 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { Link } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
+import React from "react";
+import { useSelector } from "react-redux";
+import { Link } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
 import {
   formatAlarm,
   formatAltitude,
@@ -17,14 +17,15 @@ import {
   formatTemperature,
   formatVoltage,
   formatVolume,
-  formatConsumption, formatStatusTitle
-} from '../util/formatter';
-import { speedToKnots } from '../util/converter';
-import { useAttributePreference, usePreference } from '../util/preferences';
-import {useLocalization, useTranslation} from './LocalizationProvider';
-import { useAdministrator } from '../util/permissions';
-import AddressValue from './AddressValue';
-import GeofencesValue from './GeofencesValue';
+  formatConsumption,
+  formatStatusTitle,
+} from "../util/formatter";
+import { speedToKnots } from "../util/converter";
+import { useAttributePreference, usePreference } from "../util/preferences";
+import { useLocalization, useTranslation } from "./LocalizationProvider";
+import { useAdministrator } from "../util/permissions";
+import AddressValue from "./AddressValue";
+import GeofencesValue from "./GeofencesValue";
 
 const PositionValue = ({ position, property, attribute }) => {
   const t = useTranslation();
@@ -32,111 +33,142 @@ const PositionValue = ({ position, property, attribute }) => {
 
   const admin = useAdministrator();
 
-  const device = useSelector((state) => state.devices.items[position['seals.idFromTraccar']]);
-  const deviceStatuses = useSelector((state) => state.dictionaries.deviceStatuses);
-  const transportationStatuses = useSelector((state) => state.dictionaries.transportationStatuses,);
+  const device = useSelector(
+    (state) => state.devices.items[position["seals.idFromTraccar"]]
+  );
+  const deviceStatuses = useSelector(
+    (state) => state.dictionaries.deviceStatuses
+  );
+  const transportationStatuses = useSelector(
+    (state) => state.dictionaries.transportationStatuses
+  );
   const key = property || attribute;
   const value = property ? position[property] : position.attributes[attribute];
 
-  const distanceUnit = useAttributePreference('distanceUnit');
-  const altitudeUnit = useAttributePreference('altitudeUnit');
-  const speedUnit = useAttributePreference('speedUnit');
-  const volumeUnit = useAttributePreference('volumeUnit');
-  const coordinateFormat = usePreference('coordinateFormat');
-  const hours12 = usePreference('twelveHourFormat');
+  const distanceUnit = useAttributePreference("distanceUnit");
+  const altitudeUnit = useAttributePreference("altitudeUnit");
+  const speedUnit = useAttributePreference("speedUnit");
+  const volumeUnit = useAttributePreference("volumeUnit");
+  const coordinateFormat = usePreference("coordinateFormat");
+  const hours12 = usePreference("twelveHourFormat");
 
   const formatValue = () => {
     switch (key) {
-      case 'fixTime':
-      case 'deviceTime':
-      case 'serverTime':
-        return formatTime(value, 'seconds', hours12);
-      case 'informationSeal.dateTimeActivation':
-        return formatTime(value, 'seconds', hours12);
-      case 'informationSeal.dateTimeDeactivation':
-        return formatTime(value, 'seconds', hours12);
-      case 'latitude':
-        return formatCoordinate('latitude', value, coordinateFormat);
-      case 'longitude':
-        return formatCoordinate('longitude', value, coordinateFormat);
-      case 'speed':
-        return value != null ? formatSpeed(value, speedUnit, t) : '';
-      case 'obdSpeed':
-        return value != null ? formatSpeed(speedToKnots(value, 'kmh'), speedUnit, t) : '';
-      case 'course':
+      case "fixTime":
+      case "deviceTime":
+      case "serverTime":
+        return formatTime(value, "seconds", hours12);
+      case "informationSeal.dateTimeActivation":
+        return formatTime(value, "seconds", hours12);
+      case "informationSeal.dateTimeDeactivation":
+        return formatTime(value, "seconds", hours12);
+      case "latitude":
+        return formatCoordinate("latitude", value, coordinateFormat);
+      case "longitude":
+        return formatCoordinate("longitude", value, coordinateFormat);
+      case "speed":
+        return value != null ? formatSpeed(value, speedUnit, t) : "";
+      case "obdSpeed":
+        return value != null
+          ? formatSpeed(speedToKnots(value, "kmh"), speedUnit, t)
+          : "";
+      case "course":
         return formatCourse(value);
-      case 'altitude':
+      case "altitude":
         return formatAltitude(value, altitudeUnit, t);
-      case 'power':
-      case 'battery':
+      case "power":
+      case "battery":
         return formatVoltage(value, t);
-      case 'batteryLevel':
-        return value != null ? formatPercentage(value, t) : '';
-      case 'volume':
-        return value != null ? formatVolume(value, volumeUnit, t) : '';
-      case 'fuelConsumption':
-        return value != null ? formatConsumption(value, t) : '';
-      case 'coolantTemp':
+      case "batteryLevel":
+        return value != null ? formatPercentage(value, t) : "";
+      case "volume":
+        return value != null ? formatVolume(value, volumeUnit, t) : "";
+      case "fuelConsumption":
+        return value != null ? formatConsumption(value, t) : "";
+      case "coolantTemp":
         return formatTemperature(value);
-      case 'alarm':
+      case "alarm":
         return formatAlarm(value, t);
-      case 'odometer':
-      case 'serviceOdometer':
-      case 'tripOdometer':
-      case 'obdOdometer':
-      case 'distance':
-      case 'transportationStatus':
+      case "odometer":
+      case "serviceOdometer":
+      case "tripOdometer":
+      case "obdOdometer":
+      case "distance":
+      case "transportationStatus":
         return formatStatusTitle(
           transportationStatuses,
-          device[key],
-          language,
+          device?.[key],
+          language
         );
-      case 'informationSeal.statusEns':
-        return formatStatusTitle(
-          deviceStatuses,
-          device[key],
-          language,
-        );
-      case 'totalDistance':
-        return value != null ? formatDistance(value, distanceUnit, t) : '';
-      case 'hours':
-        return value != null ? formatNumericHours(value, t) : '';
+      case "informationSeal.statusEns":
+        return formatStatusTitle(deviceStatuses, device?.[key], language);
+      case "totalDistance":
+        return value != null ? formatDistance(value, distanceUnit, t) : "";
+      case "hours":
+        return value != null ? formatNumericHours(value, t) : "";
       default:
-        if (typeof value === 'number') {
+        if (typeof value === "number") {
           return formatNumber(value);
-        } if (typeof value === 'boolean') {
+        }
+        if (typeof value === "boolean") {
           return formatBoolean(value, t);
         }
-        return value || '';
+        return value || "";
     }
   };
 
   switch (key) {
-    case 'image':
-    case 'video':
-    case 'audio':
-      return (<Link href={`/api/media/${device.uniqueId}/${value}`} target="_blank">{value}</Link>);
-    case 'totalDistance':
-    case 'hours':
+    case "image":
+    case "video":
+    case "audio":
+      return (
+        <Link href={`/api/media/${device.uniqueId}/${value}`} target="_blank">
+          {value}
+        </Link>
+      );
+    case "totalDistance":
+    case "hours":
       return (
         <>
           {formatValue(value)}
           &nbsp;&nbsp;
-          {admin && (<Link component={RouterLink} underline="none" to={`/settings/accumulators/${position.deviceId}`}>&#9881;</Link>)}
+          {admin && (
+            <Link
+              component={RouterLink}
+              underline="none"
+              to={`/settings/accumulators/${position.deviceId}`}
+            >
+              &#9881;
+            </Link>
+          )}
         </>
       );
-    case 'address':
-      return (<AddressValue latitude={position.latitude} longitude={position.longitude} originalAddress={value} />);
-    case 'network':
+    case "address":
+      return (
+        <AddressValue
+          latitude={position.latitude}
+          longitude={position.longitude}
+          originalAddress={value}
+        />
+      );
+    case "network":
       if (value) {
-        return (<Link component={RouterLink} underline="none" to={`/network/${position.id}`}>{t('sharedInfoTitle')}</Link>);
+        return (
+          <Link
+            component={RouterLink}
+            underline="none"
+            to={`/network/${position.id}`}
+          >
+            {t("sharedInfoTitle")}
+          </Link>
+        );
       }
-      return '';
-    case 'geofenceIds':
+      return "";
+    case "geofenceIds":
       if (value) {
-        return (<GeofencesValue geofenceIds={value} />);
+        return <GeofencesValue geofenceIds={value} />;
       }
-      return '';
+      return "";
     default:
       return formatValue(value);
   }
