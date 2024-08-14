@@ -12,6 +12,7 @@ import useGeofenceAttributes from '../common/attributes/useGeofenceAttributes';
 import SettingsMenu from './components/SettingsMenu';
 import SelectField from '../common/components/SelectField';
 import { geofencesActions } from '../store';
+import geofenceTypes from '../common/util/geofenceTypes';
 
 const useStyles = makeStyles((theme) => ({
   details: {
@@ -60,6 +61,15 @@ const GeofencePage = () => {
                 value={item.name || ''}
                 onChange={(event) => setItem({ ...item, name: event.target.value })}
                 label={t('sharedName')}
+              />
+              <SelectField
+                value={item.type || ''}
+                onChange={(event) => setItem({ ...item, type: event.target.value })}
+                label={t('sharedType')}
+                data={geofenceTypes.map((type) => ({
+                  id: type,
+                  name: type,
+                }))}
               />
             </AccordionDetails>
           </Accordion>
