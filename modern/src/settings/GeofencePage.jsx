@@ -36,7 +36,7 @@ const GeofencePage = () => {
     dispatch(geofencesActions.update([result]));
   };
 
-  const validate = () => item && item.name;
+  const validate = () => item && item.name && item.type;
 
   return (
     <EditItemView
@@ -63,6 +63,7 @@ const GeofencePage = () => {
                 label={t('sharedName')}
               />
               <SelectField
+                emptyValue={null}
                 value={item.type || ''}
                 onChange={(event) => setItem({ ...item, type: event.target.value })}
                 label={t('sharedType')}
