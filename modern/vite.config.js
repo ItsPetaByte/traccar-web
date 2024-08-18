@@ -9,8 +9,8 @@ export default defineConfig(() => ({
   server: {
     port: 3000,
     proxy: {
-      '/api/socket': `ws://${process.env.APP_DOMAIN}:8082`,
-      '/api': `https://${process.env.APP_DOMAIN}`,
+      '/api/socket': 'ws://localhost:8082',
+      '/api': 'http://localhost:8082',
       '/axelor-api': {
         target: `https://${process.env.APP_AXE_DOMAIN}`,
         changeOrigin: true,

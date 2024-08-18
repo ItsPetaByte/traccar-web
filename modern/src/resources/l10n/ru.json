@@ -586,6 +586,7 @@
   "axelorTransportationNumber": "Номер поездки",
   "axelorTransportationStatus": "Статус поездки",
   "axelorNumberEns": "Номер ЭНП",
+  "routeGeofence": "ID Маршрута",
   "axelorStatusEns": "Статус ЭНП",
   "axelorTypeOfAlarm": "Вид тревоги",
   "axelorBatteryLevel": "Состояние заряда батареи",

@@ -593,6 +593,7 @@
   "axelorTransportationNumber": "Trip number",
   "axelorTransportationStatus": "Trip status",
   "axelorNumberEns": "Ens number",
+  "routeGeofence": "Route ID",
   "axelorStatusEns": "Ens status",
   "axelorTypeOfAlarm": "Type of alarm",
   "axelorBatteryLevel": "Battery charge level",

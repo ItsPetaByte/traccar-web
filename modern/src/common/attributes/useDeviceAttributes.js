@@ -42,6 +42,10 @@ export default (t) => useMemo(() => ({
     name: t('axelorNumberEns'),
     type: 'string'
   },
+  'seals.geofenceId': {
+    name: t('routeGeofence'),
+    type: 'number'
+  },
   'informationSeal.statusEns': {
     name: t('axelorStatusEns'),
     type: 'string'

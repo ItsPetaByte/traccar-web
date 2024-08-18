@@ -586,6 +586,7 @@
   "axelorTransportationNumber": "Сапар номери",
   "axelorTransportationStatus": "Сапар статусу",
   "axelorNumberEns": "ЭНП номери",
+  "routeGeofence": "Маршрут ID",
   "axelorStatusEns": "ЭНП статусу",
   "axelorTypeOfAlarm": "Тревоганын түрү",
   "axelorBatteryLevel": "Батареянын четкилиги",
