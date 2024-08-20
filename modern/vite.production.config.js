@@ -9,8 +9,8 @@ export default defineConfig(() => ({
   server: {
     port: 3000,
     proxy: {
-      '/api/socket': `ws://${process.env.APP_DOMAIN}:8082`,
-      '/api': `https://${process.env.APP_DOMAIN}`,
+      '/api/socket': 'ws://plomba.sanarip.org',
+      '/api': 'http://plomba.sanarip.org',
       '/axelor-api': {
         target: `https://${process.env.APP_AXE_DOMAIN}`,
         changeOrigin: true,
